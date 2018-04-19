@@ -10,7 +10,7 @@ public class main_container extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        Parent root = loader.load(getClass().getResource("/Fxml/login.fxml").openStream());
+        Parent root = loader.load(getClass().getResource("/Fxml/main_screen.fxml").openStream());
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/styles/tab_style.css").toExternalForm());
 
