@@ -65,7 +65,7 @@ public class subblier {
         DBObject dbObjectRetrieved = dbCollection.findOne(basicDBObject);
 
         return dbObjectRetrieved;
-
+// \asertdtf
 
     }
 
