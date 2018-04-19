@@ -110,23 +110,25 @@
                             <Label layoutX="30.0" layoutY="520.0" prefHeight="25.0" prefWidth="150.0" text="You are signed in as :" />
                             <Label layoutX="200.0" layoutY="420.0" prefHeight="25.0" prefWidth="90.0" />
                             <Button layoutX="500.0" layoutY="520.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" styleClass="round-red" text="sign out" />
-                            <Button layoutX="150.0" layoutY="400.0" mnemonicParsing="false" styleClass="round-red" text="Add" />
-                            <Button layoutX="300.0" layoutY="400.0" mnemonicParsing="false" styleClass="round-red" text="Remove" />
-                            <Button layoutX="760.0" layoutY="260.0" mnemonicParsing="false" styleClass="round-red" text="Update" />
+                            <Button fx:id="supplierAdd" layoutX="825.0" layoutY="306.0" mnemonicParsing="false" onAction="#supplierAddAction" styleClass="round-red" text="Add" />
+                            <Button fx:id="supplierDelete" layoutX="300.0" layoutY="400.0" mnemonicParsing="false" onAction="#supplierDeleteAction" styleClass="round-red" text="Remove" />
+                            <Button fx:id="supplierUpdate" layoutX="721.0" layoutY="306.0" mnemonicParsing="false" onAction="#supplierUpdateAction" styleClass="round-red" text="Update" />
                             <Label layoutX="670.0" layoutY="40.0" scaleX="2.0" text="update subblier name" />
-                            <TreeTableView layoutX="10.0" layoutY="80.0" prefHeight="250.0" prefWidth="480.0">
+                            <TreeTableView fx:id="supplierTable" layoutX="10.0" layoutY="80.0" prefHeight="291.0" prefWidth="553.0">
                                 <columns>
-                                    <TreeTableColumn prefWidth="120.0" text="Name" />
-                                    <TreeTableColumn prefWidth="120.0" text="phone" />
-                                    <TreeTableColumn prefWidth="120.0" text="password" />
-                                    <TreeTableColumn prefWidth="120.0" text="address" />
+                                    <TreeTableColumn fx:id="supplierTableName" prefWidth="195.0" text="Name" />
+                                    <TreeTableColumn fx:id="supplierTablePhone" prefWidth="158.0" text="phone" />
+                                    <TreeTableColumn fx:id="supplierTableAddress" prefWidth="197.0" text="address" />
                                 </columns>
                             </TreeTableView>
-                            <Label layoutX="620.0" layoutY="120.0" text="old name" />
-                            <Label layoutX="620.0" layoutY="180.0" text="new name" />
-                            <TextField layoutX="760.0" layoutY="120.0" />
-                            <TextField layoutX="760.0" layoutY="180.0" />
+                            <Label layoutX="683.0" layoutY="124.0" text="Name" />
+                            <Label layoutX="677.0" layoutY="226.0" text="Address" />
+                            <TextField fx:id="supplierName" layoutX="754.0" layoutY="120.0" prefHeight="25.0" prefWidth="155.0" />
+                            <TextField fx:id="supplierAddress" layoutX="753.0" layoutY="222.0" prefHeight="25.0" prefWidth="156.0" />
                             <Label layoutX="80.0" layoutY="40.0" scaleX="1.5" text="select the raw you want to delete or add a new one" />
+                        <Label layoutX="677.0" layoutY="174.0" text="phone" />
+                        <TextField fx:id="supplierPhone" layoutX="756.0" layoutY="170.0" />
+                        <Button fx:id="supplierRefresh" layoutX="756.0" layoutY="363.0" mnemonicParsing="false" onAction="#supplierRefreshAction" prefHeight="50.0" prefWidth="82.0" styleClass="round-red" text="Refresh" />
                         </children>
                     </AnchorPane>
                 </content>
@@ -140,12 +142,12 @@
                          <Label layoutX="200.0" layoutY="420.0" prefHeight="25.0" prefWidth="90.0" />
                          <Button layoutX="500.0" layoutY="520.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" styleClass="round-red" text="sign out" />
                         <Button layoutX="580.0" layoutY="400.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" styleClass="round-red" text="OK" />
-                        <TreeTableView layoutX="10.0" layoutY="80.0" prefHeight="250.0" prefWidth="400.0">
+                        <TreeTableView layoutX="10.0" layoutY="80.0" prefHeight="250.0" prefWidth="441.0">
                           <columns>
                             <TreeTableColumn prefWidth="100.0" text="Name" />
                             <TreeTableColumn prefWidth="100.0" text="Amount" />
                               <TreeTableColumn prefWidth="100.0" text="Cost" />
-                              <TreeTableColumn prefWidth="100.0" text="Ordering_date" />
+                              <TreeTableColumn prefWidth="140.0" text="Ordering_date" />
                           </columns>
                         </TreeTableView>
                         <Button layoutX="100.0" layoutY="400.0" mnemonicParsing="false" styleClass="round-red" text="Print Table" />
