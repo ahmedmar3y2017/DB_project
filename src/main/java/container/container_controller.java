@@ -16,20 +16,25 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import mongo.employee;
 import mongo.product;
 import mongo.subblier;
-
 import java.net.URL;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class container_controller implements Initializable {
+
+
+
+    /////////////////////////////////////////// Subblier ////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     @FXML
@@ -62,8 +67,11 @@ public class container_controller implements Initializable {
     private TextField supplierPhone;
 
     ObservableList<SupplierTable> supplierTable_Data = FXCollections.observableArrayList();
+
     ObservableList<String> subblier_names = FXCollections.observableArrayList();
-    ObservableList<String> employee_names_names = FXCollections.observableArrayList();
+
+    ArrayList<String> subblier_Ids = new ArrayList<>();
+
 
 
     @FXML
@@ -125,7 +133,6 @@ public class container_controller implements Initializable {
     void supplierUpdateAction(ActionEvent event) {
 
 
-        // add Supplier Table
         if (supplierName.getText().trim().isEmpty()
                 || supplierAddress.getText().trim().isEmpty()
                 || supplierPhone.getText().trim().isEmpty()
@@ -135,11 +142,11 @@ public class container_controller implements Initializable {
 
         } else {
 
-            // set filesd
+            // set fields
 
             SupplierTable supplierTableSelected = supplierTable.getSelectionModel().getSelectedItem().getValue();
 
-            // insert into database
+            // insert subblier_updated into database
 
             BasicDBObject basicDBObject = new BasicDBObject();
             basicDBObject.put("name", supplierName.getText());
@@ -147,15 +154,16 @@ public class container_controller implements Initializable {
             basicDBObject.put("phone", supplierPhone.getText());
 
 
-            // problem Method
+
             BasicDBObject basicDBObjectUpdated = subblier.updateSupplier(supplierTableSelected.id.get(), basicDBObject);
             if (basicDBObjectUpdated != null) {
 
                 // remove row from table
                 supplierTable_Data.remove(supplierTableSelected);
 
-                // add new
-                // add to table
+
+
+                // add new to table
                 supplierTable_Data.add(new SupplierTable(supplierTableSelected.id.get(),
                         supplierName.getText(),
                         supplierAddress.getText(),
@@ -192,7 +200,7 @@ public class container_controller implements Initializable {
                 || supplierPhone.getText().trim().isEmpty()
 
                 ) {
-            dialog dialog = new dialog(Alert.AlertType.WARNING, "خطأ", "ادخل جميع البيانات");
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "enter all data");
 
         } else {
 
@@ -234,6 +242,9 @@ public class container_controller implements Initializable {
 
     }
 
+    /////////////////////////////////////////// EMPLOYEE ////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     @FXML
     private TextField employee_name;
@@ -271,11 +282,15 @@ public class container_controller implements Initializable {
 
     ObservableList<EmployeeTable> EmployeeTable_data = FXCollections.observableArrayList();
 
+    ObservableList<String> employee_names_names = FXCollections.observableArrayList();
+
+    ArrayList<String> employee_Ids = new ArrayList<>();
+
 
     @FXML
     void add_employee_action(ActionEvent event) {
 
-        // add Supplier Table
+
         if (employee_name.getText().trim().isEmpty()
                 || employee_address.getText().trim().isEmpty()
                 || employee_phone.getText().trim().isEmpty()
@@ -300,7 +315,7 @@ public class container_controller implements Initializable {
 
             if (basicDBObject2 != null) {
 
-                // add
+                // add to table
                 EmployeeTable_data.add(new EmployeeTable(basicDBObject2.get("_id").toString(),
                         basicDBObject2.get("name").toString(),
                         basicDBObject2.get("address").toString(),
@@ -380,7 +395,7 @@ public class container_controller implements Initializable {
 
     @FXML
     void update_employee_action(ActionEvent event) {
-// add emp Table
+
         if (employee_name.getText().trim().isEmpty()
                 || employee_address.getText().trim().isEmpty()
                 || employee_phone.getText().trim().isEmpty()
@@ -437,7 +452,8 @@ public class container_controller implements Initializable {
     }
 
 
-    ///////////////////////////////// PRODUCT //////////////////////////////////////
+    ////////////////////////////////////////// PRODUCT /////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @FXML
     private Button add_product;
@@ -493,8 +509,20 @@ public class container_controller implements Initializable {
     ObservableList<ProductTable> Product_Table_Data = FXCollections.observableArrayList();
 
 
+
     @FXML
     void refresh_product_action(ActionEvent event) {
+        this.product_name.setText("");
+        this.product_arrival_date.getEditor().setText(null);
+        this.product_request_date.getEditor().setText(null);
+        this.product_sell_price.setText("");
+        this.product_buy_price.setText("");
+        this.product_subblier_name.getEditor().setText("");
+        this.product_employee_name.getEditor().setText("");
+
+
+        add_product.setDisable(false);
+        update_product.setDisable(true);
 
     }
 
@@ -519,22 +547,46 @@ public class container_controller implements Initializable {
             Date arrival_date = Date.from(product_arrival_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             Date request_date = Date.from(product_request_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
+            // select Supplier Id From Combobox how ?
+            int supplierIndex = product_subblier_name.getSelectionModel().getSelectedIndex();
+            String subblierId = subblier_Ids.get(supplierIndex);
+            // select Employee Id From Combobox how ?
+            int employeeIndex = product_employee_name.getSelectionModel().getSelectedIndex();
+            String employeeId = employee_Ids.get(employeeIndex);
+
 
             // insert into product database
 
             BasicDBObject basicDBObject = new BasicDBObject();
             basicDBObject.put("name", product_name.getText());
-            basicDBObject.put("product_subblier_name", product_subblier_name.getSelectionModel().getSelectedItem());
-            basicDBObject.put("product_employee_name", product_employee_name.getSelectionModel().getSelectedItem());
+            basicDBObject.put("product_subblier_id", subblierId);
+            basicDBObject.put("product_employee_id", employeeId);
             basicDBObject.put("sellprice", product_sell_price.getText());
             basicDBObject.put("buyprice", product_buy_price.getText());
-            basicDBObject.put("arr_date", arrival_date);
-            basicDBObject.put("req_date", request_date);
+            basicDBObject.put("arr_date", new SimpleDateFormat("yyyy-MM-dd").format(arrival_date));
+            basicDBObject.put("req_date", new SimpleDateFormat("yyyy-MM-dd").format(request_date));
 
 
             //
 
             BasicDBObject basicDBObject2 = product.insertproduct(basicDBObject);
+
+
+            if (basicDBObject2 != null) {
+
+                // add to table
+                Product_Table_Data.add(new ProductTable(basicDBObject2.get("_id").toString(),
+                        basicDBObject2.get("name").toString(),
+                        basicDBObject2.get("product_subblier_id").toString(),
+                        basicDBObject2.get("product_employee_id").toString(),
+                        basicDBObject2.get("sellprice").toString(),
+                        basicDBObject2.get("buyprice").toString(),
+                        basicDBObject2.get("arr_date").toString(),
+                        basicDBObject2.get("req_date").toString()));
+
+                final TreeItem<EmployeeTable> rootemp = new RecursiveTreeItem<EmployeeTable>(EmployeeTable_data, RecursiveTreeObject::getChildren);
+                employee_table.setRoot(rootemp);
+            }
 
 
             this.product_name.setText("");
@@ -552,14 +604,160 @@ public class container_controller implements Initializable {
 
     @FXML
     void update_product_action(ActionEvent event) {
+        if (product_name.getText().trim().isEmpty()
+                || product_buy_price.getText().trim().isEmpty()
+                || product_sell_price.getText().trim().isEmpty()
+                || product_subblier_name.getSelectionModel().getSelectedItem() == null
+                || product_employee_name.getSelectionModel().getSelectedItem() == null
+                || product_arrival_date.getValue().equals("")
+                || product_request_date.getValue().equals("")
+
+                ) {
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "enter all data");
+
+        } else {
+
+            ProductTable product_selected = product_table_view.getSelectionModel().getSelectedItem().getValue();
+
+            Date arrival_date = Date.from(product_arrival_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date request_date = Date.from(product_request_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+
+            int supplierIndex = product_subblier_name.getSelectionModel().getSelectedIndex();
+            String subblierId = subblier_Ids.get(supplierIndex);
+
+
+
+            int employeeIndex = product_employee_name.getSelectionModel().getSelectedIndex();
+            String employeeId = employee_Ids.get(employeeIndex);
+
+
+            // insert into product database
+
+            BasicDBObject basicDBObject = new BasicDBObject();
+            basicDBObject.put("name", product_name.getText());
+            basicDBObject.put("product_subblier_id", subblierId);
+            basicDBObject.put("product_employee_id", employeeId);
+            basicDBObject.put("sellprice", product_sell_price.getText());
+            basicDBObject.put("buyprice", product_buy_price.getText());
+            basicDBObject.put("arr_date", new SimpleDateFormat("yyyy-MM-dd").format(arrival_date));
+            basicDBObject.put("req_date", new SimpleDateFormat("yyyy-MM-dd").format(request_date));
+
+
+            BasicDBObject b_updated = product.updateproduct(product_selected.id.get(), basicDBObject);
+            if (b_updated != null) {
+
+                // remove row from table
+                Product_Table_Data.remove(product_selected);
+
+
+                // add updated to table
+                Product_Table_Data.add(new ProductTable(b_updated.get("_id").toString(),
+                        b_updated.get("name").toString(),
+                        b_updated.get("product_subblier_id").toString(),
+                        b_updated.get("product_employee_id").toString(),
+                        b_updated.get("sellprice").toString(),
+                        b_updated.get("buyprice").toString(),
+                        b_updated.get("arr_date").toString(),
+                        b_updated.get("req_date").toString()));
+
+                final TreeItem<ProductTable> rootproduct = new RecursiveTreeItem<ProductTable>(Product_Table_Data, RecursiveTreeObject::getChildren);
+                product_table_view.setRoot(rootproduct);
+
+
+                // reset Fields
+                this.product_name.setText("");
+                this.product_employee_name.getEditor().setText("");
+                this.product_subblier_name.getEditor().setText("");
+                this.product_sell_price.setText("");
+                this.product_buy_price.setText("");
+                product_request_date.getEditor().clear();
+                product_arrival_date.getEditor().clear();
+
+
+
+            }
+
+
+        }
+
+
 
     }
 
     @FXML
     void remove_product_action(ActionEvent event) {
 
+
+        // check Select from table
+
+        RecursiveTreeItem recursiveTreeItem = (RecursiveTreeItem) product_table_view.getSelectionModel().getSelectedItem();
+
+        if (recursiveTreeItem == null) {
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "choose product to delete  ");
+
+
+        } else {
+
+            ProductTable productTableselected = (ProductTable) recursiveTreeItem.getValue();
+
+
+            // reomve From database
+
+            BasicDBObject basicDBObject = product.deleteproduct(productTableselected.id.get());
+
+
+            if (basicDBObject != null) {
+
+                // remove from table
+                boolean t = Product_Table_Data.remove(productTableselected);
+                if (t) {
+
+                    final TreeItem<ProductTable> rootproduct = new RecursiveTreeItem<ProductTable>(Product_Table_Data, RecursiveTreeObject::getChildren);
+                    product_table_view.setRoot(rootproduct);
+
+                }
+
+
+            }
+
+
+        }
+
+
     }
 
+
+    @FXML
+    void product_employee_nameMouseClick(MouseEvent event) {
+        List<DBObject> dbObjects3 = employee.selectemployees();
+        employee_names_names.clear();
+        employee_Ids.clear();
+        for (int i = 0; i < dbObjects3.size(); i++) {
+
+            DBObject obj = dbObjects3.get(i);
+            employee_names_names.add(obj.get("name").toString());
+            employee_Ids.add(obj.get("_id").toString());
+
+
+        }
+        System.out.println(employee_names_names);
+    }
+
+    @FXML
+    void product_subblier_nameMouseClick(MouseEvent event) {
+        List<DBObject> dbObjects2 = subblier.selectAllSubbliser();
+        subblier_names.clear();
+        subblier_Ids.clear();
+
+        for (int i = 0; i < dbObjects2.size(); i++) {
+
+            DBObject obj = dbObjects2.get(i);
+            subblier_names.add(obj.get("name").toString());
+            subblier_Ids.add(obj.get("_id").toString());
+
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -734,27 +932,26 @@ public class container_controller implements Initializable {
 
             DBObject ee = dbObject_p.get(i);
 
-            String arr_date = ee.get("arr_date").toString();
-            String req_date = ee.get("req_date").toString();
 
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+            // select SupplierName
+            String subblierId = ee.get("product_subblier_id").toString();
 
-            try {
-                Date arriveDate = formatter.parse(arr_date);
-                Date reqDate = formatter.parse(req_date);
+            // select EmployeeName
+            String employeeId = ee.get("product_employee_id").toString();
 
-                Product_Table_Data.add(new ProductTable(ee.get("_id").toString(),
-                        ee.get("name").toString(),
-                        ee.get("product_subblier_name").toString(),
-                        ee.get("product_employee_name").toString(),
-                        ee.get("sellprice").toString(),
-                        ee.get("buyprice").toString(),
-                        formatter.format(arriveDate),
-                        formatter.format(reqDate)));
-            } catch (ParseException e) {
 
-                e.printStackTrace();
-            }
+            DBObject subblierObject = subblier.selectSupplierById(subblierId);
+            DBObject employeeObject = employee.selectEmployeeById(employeeId);
+
+
+            Product_Table_Data.add(new ProductTable(ee.get("_id").toString(),
+                    ee.get("name").toString(),
+                    subblierObject.get("name").toString(),
+                    employeeObject.get("name").toString(),
+                    ee.get("sellprice").toString(),
+                    ee.get("buyprice").toString(),
+                    ee.get("arr_date").toString(),
+                    ee.get("req_date").toString()));
 
 
         }
@@ -764,6 +961,7 @@ public class container_controller implements Initializable {
         final TreeItem<ProductTable> rootproduct = new RecursiveTreeItem<ProductTable>(Product_Table_Data, RecursiveTreeObject::getChildren);
         product_table_view.setRoot(rootproduct);
         product_table_view.setShowRoot(false);
+
 
         // double Click Action subblier
 
@@ -819,34 +1017,35 @@ public class container_controller implements Initializable {
             return row;
         });
 
+        // double Click Action product
 
-        // ***********************  select name of subblier ***********************
+        product_table_view.setRowFactory(tv -> {
+            TreeTableRow<ProductTable> row = new TreeTableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY
+                        && event.getClickCount() == 2) {
 
-        List<DBObject> dbObjects2 = subblier.selectAllSubbliser();
-
-        for (int i = 0; i < dbObjects2.size(); i++) {
-
-            DBObject obj = dbObjects2.get(i);
-            subblier_names.add(obj.get("name").toString());
-
-
-        }
-        System.out.println(subblier_names);
-        // *********************************************************
+                    // action Double Click
+                    add_product.setDisable(true);
+                    update_product.setDisable(false);
 
 
-        // ***********************  select name of employee ***********************
-
-        List<DBObject> dbObjects3 = employee.selectemployees();
-
-        for (int i = 0; i < dbObjects3.size(); i++) {
-
-            DBObject obj = dbObjects3.get(i);
-            employee_names_names.add(obj.get("name").toString());
+                    ProductTable product_selected = product_table_view.getSelectionModel().getSelectedItem().getValue();
 
 
-        }
-        System.out.println(employee_names_names);
+                    this.product_name.setText(product_selected.name.getValue());
+                    this.product_employee_name.getEditor().setText(product_selected.p_employeename.getValue());
+                    this.product_subblier_name.getEditor().setText(product_selected.p_subbliername.getValue());
+                    this.product_buy_price.setText(product_selected.buy_price.getValue());
+                    this.product_sell_price.setText(product_selected.sell_price.getValue());
+                    this.product_arrival_date.getEditor().setText(product_selected.arr_date.getValue());
+                    this.product_request_date.getEditor().setText(product_selected.req_date.getValue());
+
+
+                }
+            });
+            return row;
+        });
 
 
     }

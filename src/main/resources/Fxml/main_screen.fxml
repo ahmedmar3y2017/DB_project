@@ -81,8 +81,8 @@
                         <DatePicker fx:id="product_request_date" layoutX="415.0" layoutY="438.0" prefWidth="150.0" />
                         <Label layoutX="34.0" layoutY="349.0" text="Name" />
                         <TextField fx:id="product_name" layoutX="125.0" layoutY="345.0" />
-                        <ComboBox fx:id="product_subblier_name" layoutX="702.0" layoutY="342.0" prefWidth="150.0" />
-                        <ComboBox fx:id="product_employee_name" layoutX="702.0" layoutY="435.0" prefWidth="150.0" />
+                        <ComboBox fx:id="product_subblier_name" layoutX="702.0" layoutY="342.0" onMouseClicked="#product_subblier_nameMouseClick" prefWidth="150.0" />
+                        <ComboBox fx:id="product_employee_name" layoutX="702.0" layoutY="435.0" onMouseClicked="#product_employee_nameMouseClick" prefWidth="150.0" />
                      </children>
                   </AnchorPane>
             </content>

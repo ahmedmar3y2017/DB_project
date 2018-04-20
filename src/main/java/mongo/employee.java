@@ -55,7 +55,18 @@ public class employee {
 
     }
 
+    // select by Id
+    public static DBObject selectEmployeeById(String id) {
 
+        BasicDBObject basicDBObject = new BasicDBObject();
+        basicDBObject.put("_id", new ObjectId(id));
+
+        DBObject dbObjectRetrieved = dbCollection.findOne(basicDBObject);
+
+        return dbObjectRetrieved;
+// \asertdtf
+
+    }
 
     }
 
