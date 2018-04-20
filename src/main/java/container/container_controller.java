@@ -385,6 +385,29 @@ public class container_controller implements Initializable {
 
         });
 
+
+        // ***********************  select all database ***********************
+
+        List<DBObject> dbObjects = subblier.selectAllSubbliser();
+
+        for (int i = 0; i < dbObjects.size(); i++) {
+
+            DBObject ee = dbObjects.get(i);
+            supplierTable_Data.add(new SupplierTable(ee.get("_id").toString(),
+                    ee.get("name").toString(),
+                    ee.get("address").toString(),
+                    ee.get("phone").toString()));
+
+        }
+        // *********************************************************
+
+
+
+
+        final TreeItem<SupplierTable> rootSupplier = new RecursiveTreeItem<SupplierTable>(supplierTable_Data, RecursiveTreeObject::getChildren);
+        supplierTable.setRoot(rootSupplier);
+        supplierTable.setShowRoot(false);
+
        /////////////  initiate employee table //////////////
 
         employee_name_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<EmployeeTable, String>, ObservableValue<String>>() {
@@ -420,21 +443,6 @@ public class container_controller implements Initializable {
 
 
 
-        // ***********************  select all database ***********************
-
-        List<DBObject> dbObjects = subblier.selectAllSubbliser();
-
-        for (int i = 0; i < dbObjects.size(); i++) {
-
-            DBObject ee = dbObjects.get(i);
-            supplierTable_Data.add(new SupplierTable(ee.get("_id").toString(),
-                    ee.get("name").toString(),
-                    ee.get("address").toString(),
-                    ee.get("phone").toString()));
-
-        }
-        // *********************************************************
-
 
 
         // ***********************  select all database ***********************
@@ -453,14 +461,9 @@ public class container_controller implements Initializable {
         }
         // *********************************************************
 
-
-
-
-
-        final TreeItem<SupplierTable> rootSupplier = new RecursiveTreeItem<SupplierTable>(supplierTable_Data, RecursiveTreeObject::getChildren);
-        supplierTable.setRoot(rootSupplier);
-        supplierTable.setShowRoot(false);
-
+        final TreeItem<EmployeeTable> rootEmployee = new RecursiveTreeItem<EmployeeTable>(EmployeeTable_data, RecursiveTreeObject::getChildren);
+        employee_table.setRoot(rootEmployee);
+        employee_table.setShowRoot(false);
 
         // double Click Action Table
 
