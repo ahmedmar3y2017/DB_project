@@ -607,25 +607,27 @@ public class container_controller implements Initializable {
         if (product_name.getText().trim().isEmpty()
                 || product_buy_price.getText().trim().isEmpty()
                 || product_sell_price.getText().trim().isEmpty()
-                || product_subblier_name.getSelectionModel().getSelectedItem() == null
-                || product_employee_name.getSelectionModel().getSelectedItem() == null
-                || product_arrival_date.getValue().equals("")
-                || product_request_date.getValue().equals("")
+                || product_employee_name.getEditor().getText().trim().isEmpty()
+                || product_subblier_name.getEditor().getText().trim().isEmpty()
+                || product_arrival_date.getEditor().getText().trim().isEmpty()
+                || product_request_date.getEditor().getText().trim().isEmpty()
 
                 ) {
-            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "enter all data");
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", " enter all data ");
 
         } else {
 
-            ProductTable product_selected = product_table_view.getSelectionModel().getSelectedItem().getValue();
+            ProductTable produc_selected = product_table_view.getSelectionModel().getSelectedItem().getValue();
+
+           ///////////
 
             Date arrival_date = Date.from(product_arrival_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             Date request_date = Date.from(product_request_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
+            //////////
 
             int supplierIndex = product_subblier_name.getSelectionModel().getSelectedIndex();
             String subblierId = subblier_Ids.get(supplierIndex);
-
 
 
             int employeeIndex = product_employee_name.getSelectionModel().getSelectedIndex();
@@ -644,22 +646,23 @@ public class container_controller implements Initializable {
             basicDBObject.put("req_date", new SimpleDateFormat("yyyy-MM-dd").format(request_date));
 
 
-            BasicDBObject b_updated = product.updateproduct(product_selected.id.get(), basicDBObject);
+            BasicDBObject b_updated = product.updateproduct(produc_selected.id.get(), basicDBObject);
             if (b_updated != null) {
 
                 // remove row from table
-                Product_Table_Data.remove(product_selected);
+                Product_Table_Data.remove(produc_selected);
 
 
                 // add updated to table
-                Product_Table_Data.add(new ProductTable(b_updated.get("_id").toString(),
-                        b_updated.get("name").toString(),
-                        b_updated.get("product_subblier_id").toString(),
-                        b_updated.get("product_employee_id").toString(),
-                        b_updated.get("sellprice").toString(),
-                        b_updated.get("buyprice").toString(),
-                        b_updated.get("arr_date").toString(),
-                        b_updated.get("req_date").toString()));
+                Product_Table_Data.add(new ProductTable(produc_selected.id.get(),
+                        product_name.getText(),
+                        product_subblier_name.getSelectionModel().getSelectedItem(),
+                        product_employee_name.getSelectionModel().getSelectedItem(),
+                        product_sell_price.getText(),
+                        product_buy_price.getText(),
+                        product_arrival_date.getEditor().getText().toString(),
+                        product_request_date.getEditor().getText().toString()
+                ));
 
                 final TreeItem<ProductTable> rootproduct = new RecursiveTreeItem<ProductTable>(Product_Table_Data, RecursiveTreeObject::getChildren);
                 product_table_view.setRoot(rootproduct);
