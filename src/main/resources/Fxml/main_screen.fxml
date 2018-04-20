@@ -2,6 +2,7 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -19,7 +20,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="1000.0">
                      <children>
-                         <TreeTableView fx:id="product_table" layoutX="25.0" layoutY="200.0" prefHeight="250.0" prefWidth="950.0">
+                         <TreeTableView layoutX="25.0" layoutY="200.0" prefHeight="250.0" prefWidth="950.0">
                              <columns>
                                  <TreeTableColumn prefWidth="190.0" text="Name" />
                                  <TreeTableColumn prefWidth="190.0" text="Price" />
@@ -52,24 +53,36 @@
                          <Label layoutX="30.0" layoutY="520.0" prefHeight="25.0" prefWidth="150.0" text="You are signed in as :" />
                          <Label layoutX="200.0" layoutY="420.0" prefHeight="25.0" prefWidth="90.0" />
                          <Button layoutX="500.0" layoutY="520.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" styleClass="round-red" text="sign out" />
-                        <Button layoutX="150.0" layoutY="400.0" mnemonicParsing="false" styleClass="round-red" text="Add" />
-                        <Button layoutX="300.0" layoutY="400.0" mnemonicParsing="false" styleClass="round-red" text="Remove" />
-                        <Button layoutX="760.0" layoutY="260.0" mnemonicParsing="false" styleClass="round-red" text="Update" />
-                        <Label layoutX="670.0" layoutY="40.0" scaleX="2.0" text="update product name" />
-                        <TreeTableView layoutX="10.0" layoutY="80.0" prefHeight="250.0" prefWidth="550.0">
+                        <Button fx:id="add_product" layoutX="891.0" layoutY="345.0" mnemonicParsing="false" onAction="#add_product_action" styleClass="round-red" text="Add" />
+                        <Button layoutX="882.0" layoutY="124.0" mnemonicParsing="false" onAction="#remove_product_action" styleClass="round-red" text="Remove" />
+                        <Button fx:id="update_product" layoutX="884.0" layoutY="433.0" mnemonicParsing="false" onAction="#update_product_action" styleClass="round-red" text="Update" />
+                        <TreeTableView fx:id="product_table_view" layoutX="10.0" layoutY="80.0" prefHeight="250.0" prefWidth="842.0">
                           <columns>
-                            <TreeTableColumn prefWidth="110.0" text="Name" />
-                            <TreeTableColumn prefWidth="110.0" text="Price" />
-                              <TreeTableColumn prefWidth="110.0" text="Expire_date" />
-                              <TreeTableColumn prefWidth="110.0" text="Arrival_date" />
-                              <TreeTableColumn prefWidth="110.0" text="Request_date" />
+                            <TreeTableColumn fx:id="product_name_col" prefWidth="108.0" text="Name" />
+                            <TreeTableColumn fx:id="product_sellprice_col" prefWidth="102.0" text="Sell_Price" />
+                              <TreeTableColumn fx:id="product_buyprice_col" prefWidth="121.0" text="Buy_Price" />
+                              <TreeTableColumn fx:id="product_arrivaldate_col" prefWidth="132.0" text="Arrival_date" />
+                              <TreeTableColumn fx:id="product_requestdate_col" prefWidth="129.0" text="Request_date" />
+                              <TreeTableColumn fx:id="product_subbliername_col" prefWidth="128.0" text="Subblier_name" />
+                              <TreeTableColumn fx:id="product_employeename_col" prefWidth="121.0" text="Employee_Name" />
                           </columns>
                         </TreeTableView>
-                        <Label layoutX="620.0" layoutY="120.0" text="old name" />
-                        <Label layoutX="620.0" layoutY="180.0" text="new name" />
-                        <TextField layoutX="760.0" layoutY="120.0" />
-                        <TextField layoutX="760.0" layoutY="180.0" />
-                        <Label layoutX="80.0" layoutY="40.0" scaleX="1.5" text="select the raw you want to delete or add a new one" />
+                        <Label layoutX="35.0" layoutY="395.0" text="Sell_Price" />
+                        <Label layoutX="35.0" layoutY="442.0" text="Buy_Price" />
+                        <TextField fx:id="product_sell_price" layoutX="126.0" layoutY="391.0" />
+                        <TextField fx:id="product_buy_price" layoutX="126.0" layoutY="438.0" />
+                        <Label layoutX="80.0" layoutY="40.0" scaleX="1.5" scaleY="1.5" text="select the raw you want to remove" />
+                        <Label layoutX="326.0" layoutY="348.0" text="Arrival_Date" />
+                        <Label layoutX="326.0" layoutY="441.0" text="Request_Date" />
+                        <Label layoutX="599.0" layoutY="349.0" text="Subblier_Name" />
+                        <Label layoutX="599.0" layoutY="442.0" text="Employee_Name" />
+                        <Button layoutX="882.0" layoutY="223.0" mnemonicParsing="false" onAction="#refresh_product_action" styleClass="round-red" text="Refresh" />
+                        <DatePicker fx:id="product_arrival_date" layoutX="415.0" layoutY="344.0" prefWidth="150.0" />
+                        <DatePicker fx:id="product_request_date" layoutX="415.0" layoutY="438.0" prefWidth="150.0" />
+                        <Label layoutX="34.0" layoutY="349.0" text="Name" />
+                        <TextField fx:id="product_name" layoutX="125.0" layoutY="345.0" />
+                        <ComboBox fx:id="product_subblier_name" layoutX="702.0" layoutY="342.0" prefWidth="150.0" />
+                        <ComboBox fx:id="product_employee_name" layoutX="702.0" layoutY="435.0" prefWidth="150.0" />
                      </children>
                   </AnchorPane>
             </content>
@@ -84,7 +97,7 @@
                             <Button fx:id="add_employee" layoutX="801.0" layoutY="335.0" mnemonicParsing="false" onAction="#add_employee_action" styleClass="round-red" text="Add" />
                             <Button fx:id="remove_employee" layoutX="200.0" layoutY="387.0" mnemonicParsing="false" onAction="#remove_employee_action" styleClass="round-red" text="Remove" />
                             <Button fx:id="update_employee" layoutX="663.0" layoutY="335.0" mnemonicParsing="false" onAction="#update_employee_action" styleClass="round-red" text="Update" />
-                            <Label layoutX="659.0" layoutY="40.0" scaleX="2.0" text="update employee name or add new one" />
+                            <Label layoutX="659.0" layoutY="40.0" scaleX="1.5" scaleY="1.5" text="update employee data or add new one" />
                             <TreeTableView fx:id="employee_table" layoutX="10.0" layoutY="80.0" prefHeight="250.0" prefWidth="480.0">
                                 <columns>
                                     <TreeTableColumn fx:id="employee_name_col" prefWidth="114.0" text="Name" />
@@ -97,7 +110,7 @@
                             <Label layoutX="600.0" layoutY="160.0" text="Phone" />
                             <TextField fx:id="employee_name" layoutX="690.0" layoutY="110.0" />
                             <TextField fx:id="employee_phone" layoutX="690.0" layoutY="160.0" />
-                            <Label layoutX="80.0" layoutY="40.0" scaleX="1.5" text="select the raw you want to delete " />
+                            <Label layoutX="80.0" layoutY="40.0" scaleX="1.5" scaleY="1.5" text="select the raw you want to delete " />
                         <Label layoutX="600.0" layoutY="210.0" text="Address" />
                         <TextField fx:id="employee_address" layoutX="690.0" layoutY="210.0" />
                         <Button fx:id="refresh_btn_emp" layoutX="738.0" layoutY="400.0" mnemonicParsing="false" onAction="#refresh_btn_emp_action" styleClass="round-red" text="refresh" />
@@ -118,7 +131,7 @@
                             <Button fx:id="supplierAdd" layoutX="825.0" layoutY="306.0" mnemonicParsing="false" onAction="#supplierAddAction" styleClass="round-red" text="Add" />
                             <Button fx:id="supplierDelete" layoutX="300.0" layoutY="400.0" mnemonicParsing="false" onAction="#supplierDeleteAction" styleClass="round-red" text="Remove" />
                             <Button fx:id="supplierUpdate" layoutX="721.0" layoutY="306.0" mnemonicParsing="false" onAction="#supplierUpdateAction" styleClass="round-red" text="Update" />
-                            <Label layoutX="670.0" layoutY="40.0" scaleX="2.0" text="update subblier name or add new one" />
+                            <Label layoutX="670.0" layoutY="40.0" scaleX="1.5" scaleY="1.5" text="update subblier name or add new one" />
                             <TreeTableView fx:id="supplierTable" layoutX="10.0" layoutY="80.0" prefHeight="291.0" prefWidth="553.0">
                                 <columns>
                                     <TreeTableColumn fx:id="supplierTableName" prefWidth="195.0" text="Name" />
