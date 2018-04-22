@@ -229,6 +229,9 @@ public class container_controller implements Initializable {
                 supplierTable.setRoot(rootSupplier);
 
 
+                dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "  new supplier is added");
+
+
                 // reset Fields
                 this.supplierPhone.setText("");
                 this.supplierName.setText("");
@@ -327,6 +330,9 @@ public class container_controller implements Initializable {
 
                 final TreeItem<EmployeeTable> rootemp = new RecursiveTreeItem<EmployeeTable>(EmployeeTable_data, RecursiveTreeObject::getChildren);
                 employee_table.setRoot(rootemp);
+
+
+                dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "  new employee is added");
 
 
                 // reset Fields
@@ -589,13 +595,17 @@ public class container_controller implements Initializable {
             }
 
 
+
+            dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "  new product is added");
+
+
             this.product_name.setText("");
             this.product_employee_name.getEditor().clear();
             this.product_subblier_name.getEditor().clear();
             this.product_sell_price.setText("");
             this.product_buy_price.setText("");
-            product_request_date.getEditor().clear();
-            product_arrival_date.getEditor().clear();
+            this. product_request_date.getEditor().clear();
+            this.product_arrival_date.getEditor().clear();
 
 
         }
@@ -851,10 +861,16 @@ public class container_controller implements Initializable {
                 order_table_view.setRoot(rootorder);
 
 
+                dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "  new order is added");
+
+
             }
 
 
         }
+
+
+
         // reset fielsd
         order_amount_text.setText("");
         order_product_name_wanted.getEditor().setText("");
@@ -888,19 +904,130 @@ public class container_controller implements Initializable {
     private ComboBox<String> search_req_date;
 
 
+    private TreeTableView<Search_Table> search_table_view;
+
+    @FXML
+    private TreeTableColumn<Search_Table, String> search_name_col;
+
+    @FXML
+    private TreeTableColumn<Search_Table, String> search_sell_col;
+
+    @FXML
+    private TreeTableColumn<Search_Table, String> search_buy_col;
+
+    @FXML
+    private TreeTableColumn<Search_Table, String> search_emp_col;
+
+    @FXML
+    private TreeTableColumn<Search_Table, String> search_sup_col;
+
+    @FXML
+    private TreeTableColumn<Search_Table, String> search_arr_col;
+
+    @FXML
+    private TreeTableColumn<Search_Table, String> search_req_col;
+
+
     ObservableList<String> arr_date = FXCollections.observableArrayList();
     ObservableList<String> req_date = FXCollections.observableArrayList();
+    ObservableList<Search_Table> Search_Table_Data = FXCollections.observableArrayList();
+
+    @FXML
+    void search_by_name_action(ActionEvent event) {
 
 
 
+        search_name_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Search_Table, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Search_Table, String> param) {
+                return param.getValue().getValue().name;
+            }
+
+        });
+
+        search_sell_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Search_Table, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Search_Table, String> param) {
+                return param.getValue().getValue().sell_price;
+            }
+
+        });
+        search_buy_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Search_Table, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Search_Table, String> param) {
+                return param.getValue().getValue().buy_price;
+            }
+
+        });
+        search_arr_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Search_Table, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Search_Table, String> param) {
+                return param.getValue().getValue().arr_date;
+            }
+
+        });
+        search_req_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Search_Table, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Search_Table, String> param) {
+                return param.getValue().getValue().req_date;
+            }
+
+        });
+        search_sup_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Search_Table, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Search_Table, String> param) {
+                return param.getValue().getValue().p_subbliername;
+            }
+
+        });
+
+        search_emp_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Search_Table, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Search_Table, String> param) {
+                return param.getValue().getValue().p_employeename;
+            }
+
+        });
 
 
+        String name = search_name.getSelectionModel().getSelectedItem().toString();
+        List<DBObject> dbObject_p = product.selectproduct_byname(name);
+
+        for (int i = 0; i < dbObject_p.size(); i++) {
+
+            DBObject ee = dbObject_p.get(i);
 
 
+            // select SupplierName
+            String subblierId = ee.get("product_subblier_id").toString();
+
+            // select EmployeeName
+            String employeeId = ee.get("product_employee_id").toString();
 
 
+            DBObject subblierObject = subblier.selectSupplierById(subblierId);
+            DBObject employeeObject = employee.selectEmployeeById(employeeId);
 
 
+            Search_Table_Data.add(new Search_Table(ee.get("_id").toString(),
+                    ee.get("name").toString(),
+                    subblierObject.get("name").toString(),
+                    employeeObject.get("name").toString(),
+                    ee.get("sellprice").toString(),
+                    ee.get("buyprice").toString(),
+                    ee.get("arr_date").toString(),
+                    ee.get("req_date").toString()));
+
+
+        }
+        System.out.println(dbObject_p);
+
+
+        final TreeItem<Search_Table> rootsearch = new RecursiveTreeItem<Search_Table>(Search_Table_Data, RecursiveTreeObject::getChildren);
+        search_table_view.setRoot(rootsearch);
+        search_table_view.setShowRoot(false);
+
+    }
 
 
     @Override
@@ -934,6 +1061,7 @@ public class container_controller implements Initializable {
 
 
         }
+
 
 
         supplierUpdate.setDisable(true);
@@ -1369,33 +1497,6 @@ public class container_controller implements Initializable {
     }
 
 
-    class Search_Table extends RecursiveTreeObject<Search_Table> {
-        SimpleStringProperty ps_id;
-        SimpleStringProperty ps_name;
-        SimpleStringProperty ps_subbliername;
-        SimpleStringProperty ps_employeename;
-        SimpleStringProperty ps_sell_price;
-        SimpleStringProperty ps_buy_price;
-        SimpleStringProperty ps_arr_date;
-        SimpleStringProperty ps_req_date;
-
-
-        public Search_Table(String id, String name, String p_subbliername, String p_employeename, String sellprice, String buyprice, String arr_date, String req_date) {
-            this.ps_id = new SimpleStringProperty(id);
-            this.ps_name = new SimpleStringProperty(name);
-            this.ps_subbliername = new SimpleStringProperty(p_subbliername);
-            this.ps_employeename = new SimpleStringProperty(p_employeename);
-            this.ps_sell_price = new SimpleStringProperty(sellprice);
-            this.ps_buy_price = new SimpleStringProperty(buyprice);
-            this.ps_arr_date = new SimpleStringProperty(arr_date);
-            this.ps_req_date = new SimpleStringProperty(req_date);
-
-
-        }
-
-
-    }
-
     class Order_Table extends RecursiveTreeObject<Order_Table> {
         SimpleStringProperty order_id;
         SimpleStringProperty order_name;
@@ -1414,6 +1515,32 @@ public class container_controller implements Initializable {
 
         }
 
+    }
+
+
+    class Search_Table extends RecursiveTreeObject<Search_Table> {
+        SimpleStringProperty id;
+        SimpleStringProperty name;
+        SimpleStringProperty p_subbliername;
+        SimpleStringProperty p_employeename;
+        SimpleStringProperty sell_price;
+        SimpleStringProperty buy_price;
+        SimpleStringProperty arr_date;
+        SimpleStringProperty req_date;
+
+
+        public Search_Table(String id, String name, String p_subbliername, String p_employeename, String sellprice, String buyprice, String arr_date, String req_date) {
+            this.id = new SimpleStringProperty(id);
+            this.name = new SimpleStringProperty(name);
+            this.p_subbliername = new SimpleStringProperty(p_subbliername);
+            this.p_employeename = new SimpleStringProperty(p_employeename);
+            this.sell_price = new SimpleStringProperty(sellprice);
+            this.buy_price = new SimpleStringProperty(buyprice);
+            this.arr_date = new SimpleStringProperty(arr_date);
+            this.req_date = new SimpleStringProperty(req_date);
+
+
+        }
     }
 }
 

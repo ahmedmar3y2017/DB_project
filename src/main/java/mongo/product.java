@@ -66,11 +66,73 @@ public class product {
 
     }
 
+    public static List<DBObject> selectproduct_byname(String name) {
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("name", name);
+        DBCursor cursor = dbCollection.find(searchQuery);
+        List<DBObject> retreived = null;
+
+        while (cursor.hasNext()) {
+            retreived = cursor.toArray();
+        }
+      return retreived;
+
+    }
+
+    public static List<DBObject> selectproductby_subbliername(String name) {
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("name", name);
+        DBCursor cursor = dbCollection.find(searchQuery);
+        List<DBObject> retreived = null;
+
+        while (cursor.hasNext()) {
+            retreived = cursor.toArray();
+        }
+        return retreived;
+
+    }
+
+    public static List<DBObject> selectproductby_employeeame(String name) {
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("name", name);
+        DBCursor cursor = dbCollection.find(searchQuery);
+        List<DBObject> retreived = null;
+
+        while (cursor.hasNext()) {
+            retreived = cursor.toArray();
+        }
+        return retreived;
+
+    }
+
+
+    public static List<DBObject> selectproductby_arrdate(String name) {
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("name", name);
+        DBCursor cursor = dbCollection.find(searchQuery);
+        List<DBObject> retreived = null;
+
+        while (cursor.hasNext()) {
+            retreived = cursor.toArray();
+        }
+        return retreived;
+
+    }
 
 
 
+    public static List<DBObject> selectproductby_reqdate(String name) {
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("name", name);
+        DBCursor cursor = dbCollection.find(searchQuery);
+        List<DBObject> retreived = null;
 
+        while (cursor.hasNext()) {
+            retreived = cursor.toArray();
+        }
+        return retreived;
 
+    }
 
 }
 
