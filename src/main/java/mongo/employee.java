@@ -64,7 +64,7 @@ public class employee {
         DBObject dbObjectRetrieved = dbCollection.findOne(basicDBObject);
 
         return dbObjectRetrieved;
-// \asertdtf
+
 
     }
 

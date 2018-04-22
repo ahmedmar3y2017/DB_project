@@ -17,6 +17,7 @@ public class product {
 
         dbCollection.insert(basicDBObject);
         return basicDBObject;
+
     }
 
 
@@ -79,9 +80,9 @@ public class product {
 
     }
 
-    public static List<DBObject> selectproductby_subbliername(String name) {
+    public static List<DBObject> selectproductby_subblierid(String name) {
         BasicDBObject searchQuery = new BasicDBObject();
-        searchQuery.put("name", name);
+        searchQuery.put("product_subblier_id", name);
         DBCursor cursor = dbCollection.find(searchQuery);
         List<DBObject> retreived = null;
 
@@ -92,9 +93,9 @@ public class product {
 
     }
 
-    public static List<DBObject> selectproductby_employeeame(String name) {
+    public static List<DBObject> selectproductby_employeeid(String name) {
         BasicDBObject searchQuery = new BasicDBObject();
-        searchQuery.put("name", name);
+        searchQuery.put("product_employee_id", name);
         DBCursor cursor = dbCollection.find(searchQuery);
         List<DBObject> retreived = null;
 
@@ -108,7 +109,7 @@ public class product {
 
     public static List<DBObject> selectproductby_arrdate(String name) {
         BasicDBObject searchQuery = new BasicDBObject();
-        searchQuery.put("name", name);
+        searchQuery.put( "arr_date", name);
         DBCursor cursor = dbCollection.find(searchQuery);
         List<DBObject> retreived = null;
 
@@ -123,7 +124,7 @@ public class product {
 
     public static List<DBObject> selectproductby_reqdate(String name) {
         BasicDBObject searchQuery = new BasicDBObject();
-        searchQuery.put("name", name);
+        searchQuery.put("req_date", name);
         DBCursor cursor = dbCollection.find(searchQuery);
         List<DBObject> retreived = null;
 

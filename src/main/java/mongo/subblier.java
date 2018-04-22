@@ -82,7 +82,21 @@ public class subblier {
 
     }
 
+    public static List<DBObject> select_sub_byname(String name) {
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("name", name);
+        DBCursor cursor = dbCollection.find(searchQuery);
+        List<DBObject> retreived = null;
+
+        while (cursor.hasNext()) {
+            retreived = cursor.toArray();
+        }
+        return retreived;
+
+    }
 
 
 
-}
+
+    }
+
