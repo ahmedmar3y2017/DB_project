@@ -20,28 +20,30 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="1000.0">
                      <children>
-                         <TreeTableView layoutX="25.0" layoutY="200.0" prefHeight="250.0" prefWidth="950.0">
-                             <columns>
-                                 <TreeTableColumn prefWidth="190.0" text="Name" />
-                                 <TreeTableColumn prefWidth="190.0" text="Price" />
-                                 <TreeTableColumn prefWidth="190.0" text="Request_date" />
-                                 <TreeTableColumn prefWidth="190.0" text="Arrival_date" />
-                                 <TreeTableColumn prefWidth="190.0" text="Expire_date" />
-                             </columns>
-                         </TreeTableView>
                         <Label layoutX="30.0" layoutY="520.0" prefHeight="25.0" prefWidth="150.0" text="You are signed in as :" />
                         <Label layoutX="200.0" layoutY="420.0" prefHeight="25.0" prefWidth="90.0" />
                         <Button layoutX="500.0" layoutY="520.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" styleClass="round-red" text="sign out" />
-                        <Label layoutX="30.0" layoutY="50.0" prefHeight="17.0" prefWidth="110.0" text="search by name" />
-                        <TextField layoutX="30.0" layoutY="100.0" prefHeight="25.0" prefWidth="110.0" />
-                        <Label layoutX="400.0" layoutY="50.0" text="search by subblier_name" />
-                        <TextField layoutX="400.0" layoutY="100.0" prefHeight="25.0" prefWidth="110.0" />
-                        <Label layoutX="620.0" layoutY="50.0" prefWidth="120.0" text="search by arrival date" />
-                        <Label layoutX="780.0" layoutY="50.0" prefWidth="120.0" text="search by request date" />
-                        <DatePicker layoutX="620.0" layoutY="100.0" prefWidth="120.0" />
-                        <DatePicker layoutX="780.0" layoutY="100.0" prefWidth="120.0" />
-                        <TextField layoutX="225.0" layoutY="100.0" prefHeight="25.0" prefWidth="110.0" />
-                        <Label layoutX="225.0" layoutY="50.0" text="search by employee_name" />
+                        <TreeTableView layoutX="16.0" layoutY="163.0" prefHeight="320.0" prefWidth="969.0">
+                          <columns>
+                            <TreeTableColumn prefWidth="93.0" text="Name" />
+                            <TreeTableColumn prefWidth="119.0" text="sell price" />
+                              <TreeTableColumn prefWidth="128.0" text="buy price" />
+                              <TreeTableColumn minWidth="0.0" prefWidth="156.0" text="employee name" />
+                              <TreeTableColumn prefWidth="164.0" text="supplier name" />
+                              <TreeTableColumn minWidth="0.0" prefWidth="154.0" text="arrival date" />
+                              <TreeTableColumn minWidth="0.0" prefWidth="154.0" text="request date" />
+                          </columns>
+                        </TreeTableView>
+                        <Label layoutX="16.0" layoutY="36.0" text="search by name" />
+                        <Label layoutX="817.0" layoutY="36.0" text="search by request date" />
+                        <Label layoutX="626.0" layoutY="36.0" text="search by arrival date" />
+                        <Label layoutX="422.0" layoutY="36.0" text="search by employee name" />
+                        <Label layoutX="231.0" layoutY="36.0" text="search by supplier name" />
+                        <ComboBox fx:id="search_name" layoutX="14.0" layoutY="72.0" prefHeight="32.0" prefWidth="103.0" />
+                        <ComboBox fx:id="search_employee_name" layoutX="422.0" layoutY="72.0" prefHeight="32.0" prefWidth="119.0" />
+                        <ComboBox fx:id="search_subblier_name" layoutX="232.0" layoutY="72.0" prefHeight="32.0" prefWidth="111.0" />
+                        <ComboBox fx:id="search_arr_date" layoutX="626.0" layoutY="79.0" prefHeight="32.0" prefWidth="119.0" />
+                        <ComboBox fx:id="search_req_date" layoutX="818.0" layoutY="79.0" prefHeight="32.0" prefWidth="119.0" />
                      </children>
                   </AnchorPane>
             </content>
@@ -159,33 +161,27 @@
                          <Label layoutX="30.0" layoutY="520.0" prefHeight="25.0" prefWidth="150.0" text="You are signed in as :" />
                          <Label layoutX="200.0" layoutY="420.0" prefHeight="25.0" prefWidth="90.0" />
                          <Button layoutX="500.0" layoutY="520.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" styleClass="round-red" text="sign out" />
-                        <Button layoutX="580.0" layoutY="400.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" styleClass="round-red" text="OK" />
-                        <TreeTableView layoutX="10.0" layoutY="80.0" prefHeight="250.0" prefWidth="441.0">
+                        <Button fx:id="make_order" layoutX="627.0" layoutY="305.0" mnemonicParsing="false" onAction="#make_order_action" prefHeight="25.0" prefWidth="80.0" styleClass="round-red" text="OK" />
+                        <TreeTableView fx:id="order_table_view" layoutX="10.0" layoutY="80.0" prefHeight="250.0" prefWidth="441.0">
                           <columns>
-                            <TreeTableColumn prefWidth="100.0" text="Name" />
-                            <TreeTableColumn prefWidth="100.0" text="Amount" />
-                              <TreeTableColumn prefWidth="100.0" text="Cost" />
-                              <TreeTableColumn prefWidth="140.0" text="Ordering_date" />
+                            <TreeTableColumn fx:id="order_name_col" prefWidth="100.0" text="Name" />
+                            <TreeTableColumn fx:id="order_amount_col" prefWidth="100.0" text="Amount" />
+                              <TreeTableColumn fx:id="order_cost_col" prefWidth="100.0" text="Cost" />
+                              <TreeTableColumn fx:id="order_date_col" prefWidth="140.0" text="Ordering_date" />
                           </columns>
                         </TreeTableView>
-                        <Button layoutX="100.0" layoutY="400.0" mnemonicParsing="false" styleClass="round-red" text="Print Table" />
-                        <Button layoutX="200.0" layoutY="400.0" mnemonicParsing="false" styleClass="round-red" text="Remove" />
-                        <Button layoutX="840.0" layoutY="400.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" styleClass="round-red" text="Cancel" />
-                        <Button layoutX="10.0" layoutY="30.0" mnemonicParsing="false" styleClass="round-red" text="show orders" />
-                        <Label layoutX="505.0" layoutY="72.0" scaleX="2.0" text="make new order" />
-                        <Label layoutX="755.0" layoutY="72.0" scaleX="2.0" text="cancel order" />
-                        <TextField layoutX="810.0" layoutY="150.0" />
-                        <TextField layoutX="540.0" layoutY="150.0" />
-                        <Label layoutX="460.0" layoutY="150.0" text="Name" />
-                        <Label layoutX="730.0" layoutY="150.0" text="Name" />
-                        <Label layoutX="460.0" layoutY="200.0" text="Amount" />
-                        <Label layoutX="460.0" layoutY="250.0" text="Date" />
-                        <Label layoutX="730.0" layoutY="250.0" text="Date" />
-                        <Label layoutX="730.0" layoutY="200.0" text="Amount" />
-                        <TextField layoutX="540.0" layoutY="200.0" />
-                        <TextField layoutX="810.0" layoutY="200.0" />
-                        <DatePicker layoutX="540.0" layoutY="250.0" prefWidth="149.0" />
-                        <DatePicker layoutX="810.0" layoutY="250.0" prefWidth="149.0" />
+                        <Button layoutX="180.0" layoutY="369.0" mnemonicParsing="false" styleClass="round-red" text="Remove" />
+                        <Button layoutX="848.0" layoutY="305.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" styleClass="round-red" text="Cancel" />
+                        <Label layoutX="594.0" layoutY="72.0" scaleX="1.5" scaleY="3.0" text="make new order" />
+                        <Label layoutX="839.0" layoutY="72.0" scaleX="1.5" scaleY="3.0" text="cancel order" />
+                        <Label layoutX="494.0" layoutY="151.0" text="product_name" />
+                        <Label layoutX="856.0" layoutY="151.0" text="order_name" />
+                        <Label layoutX="494.0" layoutY="201.0" text="Amount" />
+                        <Label layoutX="494.0" layoutY="251.0" text="Date" />
+                        <TextField fx:id="order_amount_text" layoutX="592.0" layoutY="200.0" />
+                        <DatePicker fx:id="order_date1" layoutX="592.0" layoutY="250.0" prefWidth="149.0" />
+                        <ComboBox fx:id="order_product_name_wanted" layoutX="592.0" layoutY="143.0" onMouseClicked="#mouse" prefHeight="24.0" prefWidth="150.0" />
+                        <ComboBox fx:id="order_product_name_unwanted" layoutX="813.0" layoutY="209.0" prefWidth="150.0" />
 
                      </children></AnchorPane>
               </content>

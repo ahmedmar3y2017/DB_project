@@ -18,6 +18,9 @@ public class product {
         dbCollection.insert(basicDBObject);
         return basicDBObject;
     }
+
+
+
     // select products
     public static List<DBObject> selectproducts() {
         DBCursor dbObjects = dbCollection.find();
@@ -52,6 +55,22 @@ public class product {
 
     }
 
+    public static DBObject selectby_productId(String id) {
+
+        BasicDBObject basicDBObject = new BasicDBObject();
+        basicDBObject.put("_id", new ObjectId(id));
+
+        DBObject dbObjectRetrieved = dbCollection.findOne(basicDBObject);
+
+        return dbObjectRetrieved;
 
     }
+
+
+
+
+
+
+
+}
 

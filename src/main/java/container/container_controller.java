@@ -5,8 +5,10 @@ import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+
 import dialog.dialog;
 import javafx.beans.property.SimpleDoubleProperty;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -19,10 +21,13 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import mongo.employee;
+import mongo.order;
 import mongo.product;
 import mongo.subblier;
+
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,7 +35,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class container_controller implements Initializable {
-
 
 
     /////////////////////////////////////////// Subblier ////////////////////////////////////////////////////////
@@ -71,7 +75,6 @@ public class container_controller implements Initializable {
     ObservableList<String> subblier_names = FXCollections.observableArrayList();
 
     ArrayList<String> subblier_Ids = new ArrayList<>();
-
 
 
     @FXML
@@ -154,13 +157,11 @@ public class container_controller implements Initializable {
             basicDBObject.put("phone", supplierPhone.getText());
 
 
-
             BasicDBObject basicDBObjectUpdated = subblier.updateSupplier(supplierTableSelected.id.get(), basicDBObject);
             if (basicDBObjectUpdated != null) {
 
                 // remove row from table
                 supplierTable_Data.remove(supplierTableSelected);
-
 
 
                 // add new to table
@@ -509,7 +510,6 @@ public class container_controller implements Initializable {
     ObservableList<ProductTable> Product_Table_Data = FXCollections.observableArrayList();
 
 
-
     @FXML
     void refresh_product_action(ActionEvent event) {
         this.product_name.setText("");
@@ -590,8 +590,8 @@ public class container_controller implements Initializable {
 
 
             this.product_name.setText("");
-            this.product_employee_name.getEditor().setText("");
-            this.product_subblier_name.getEditor().setText("");
+            this.product_employee_name.getEditor().clear();
+            this.product_subblier_name.getEditor().clear();
             this.product_sell_price.setText("");
             this.product_buy_price.setText("");
             product_request_date.getEditor().clear();
@@ -604,6 +604,8 @@ public class container_controller implements Initializable {
 
     @FXML
     void update_product_action(ActionEvent event) {
+
+
         if (product_name.getText().trim().isEmpty()
                 || product_buy_price.getText().trim().isEmpty()
                 || product_sell_price.getText().trim().isEmpty()
@@ -619,31 +621,17 @@ public class container_controller implements Initializable {
 
             ProductTable produc_selected = product_table_view.getSelectionModel().getSelectedItem().getValue();
 
-           ///////////
-
-            Date arrival_date = Date.from(product_arrival_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            Date request_date = Date.from(product_request_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-            //////////
-
-            int supplierIndex = product_subblier_name.getSelectionModel().getSelectedIndex();
-            String subblierId = subblier_Ids.get(supplierIndex);
-
-
-            int employeeIndex = product_employee_name.getSelectionModel().getSelectedIndex();
-            String employeeId = employee_Ids.get(employeeIndex);
-
 
             // insert into product database
 
             BasicDBObject basicDBObject = new BasicDBObject();
             basicDBObject.put("name", product_name.getText());
-            basicDBObject.put("product_subblier_id", subblierId);
-            basicDBObject.put("product_employee_id", employeeId);
+            basicDBObject.put("product_subblier_id", subblier_Ids.get(product_subblier_name.getSelectionModel().getSelectedIndex()).toString());
+            basicDBObject.put("product_employee_id", employee_Ids.get(product_employee_name.getSelectionModel().getSelectedIndex()).toString());
             basicDBObject.put("sellprice", product_sell_price.getText());
             basicDBObject.put("buyprice", product_buy_price.getText());
-            basicDBObject.put("arr_date", new SimpleDateFormat("yyyy-MM-dd").format(arrival_date));
-            basicDBObject.put("req_date", new SimpleDateFormat("yyyy-MM-dd").format(request_date));
+            basicDBObject.put("arr_date", new SimpleDateFormat("yyyy-MM-dd").format(Date.from(product_arrival_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant())));
+            basicDBObject.put("req_date", new SimpleDateFormat("yyyy-MM-dd").format(Date.from(product_request_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant())));
 
 
             BasicDBObject b_updated = product.updateproduct(produc_selected.id.get(), basicDBObject);
@@ -674,16 +662,14 @@ public class container_controller implements Initializable {
                 this.product_subblier_name.getEditor().setText("");
                 this.product_sell_price.setText("");
                 this.product_buy_price.setText("");
-                product_request_date.getEditor().clear();
-                product_arrival_date.getEditor().clear();
-
+                this.product_request_date.getEditor().clear();
+                this.product_arrival_date.getEditor().clear();
 
 
             }
 
 
         }
-
 
 
     }
@@ -742,10 +728,9 @@ public class container_controller implements Initializable {
             employee_names_names.add(obj.get("name").toString());
             employee_Ids.add(obj.get("_id").toString());
 
-
         }
-        System.out.println(employee_names_names);
     }
+
 
     @FXML
     void product_subblier_nameMouseClick(MouseEvent event) {
@@ -762,16 +747,209 @@ public class container_controller implements Initializable {
         }
     }
 
+
+    /////////////////////////////////////////////// ORDER ////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    ObservableList<String> Product_names = FXCollections.observableArrayList();
+
+    ObservableList<Order_Table> Order_table_data = FXCollections.observableArrayList();
+
+    ArrayList<String> p_ids = new ArrayList<>();
+
+
+    @FXML
+    private ComboBox<String> order_product_name_wanted;
+
+    @FXML
+    private TreeTableView<Order_Table> order_table_view;
+
+    @FXML
+    private TreeTableColumn<Order_Table, String> order_name_col;
+
+    @FXML
+    private TreeTableColumn<Order_Table, Double> order_amount_col;
+
+    @FXML
+    private TreeTableColumn<Order_Table, Double> order_cost_col;
+
+    @FXML
+    private TreeTableColumn<Order_Table, String> order_date_col;
+
+    @FXML
+    void mouse(MouseEvent event) {
+
+        List<DBObject> dbObjects3 = product.selectproducts();
+        Product_names.clear();
+        for (int i = 0; i < dbObjects3.size(); i++) {
+
+            DBObject obj = dbObjects3.get(i);
+            Product_names.add(obj.get("name").toString());
+
+
+        }
+    }
+
+    @FXML
+    private Button make_order;
+
+    @FXML
+    private TextField order_amount_text;
+
+    @FXML
+    private DatePicker order_date1;
+
+
+    @FXML
+    void make_order_action(ActionEvent event) {
+
+
+        if (order_amount_text.getText().trim().isEmpty()
+                || order_date1.getValue().equals(null)
+                || order_product_name_wanted.getSelectionModel().getSelectedItem().trim().isEmpty()
+
+                ) {
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "enter all data");
+
+        } else {
+
+
+            LocalDate date = order_date1.getValue();
+            Date orderDate = Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+            int index = order_product_name_wanted.getSelectionModel().getSelectedIndex();
+            String Id = p_ids.get(index);
+
+            DBObject dbObjectRetrieved = product.selectby_productId(Id);
+            String price = dbObjectRetrieved.get("buyprice").toString();
+
+            // insert into order database
+
+            BasicDBObject basicDBObject = new BasicDBObject();
+            basicDBObject.put("name", order_product_name_wanted.getSelectionModel().getSelectedItem());
+            basicDBObject.put("amount", order_amount_text.getText());
+            basicDBObject.put("cost", Double.parseDouble(price) * Double.parseDouble(order_amount_text.getText()));
+            basicDBObject.put("date", new SimpleDateFormat("yyyy-MM-dd").format(orderDate));
+
+
+            BasicDBObject basicDBObject2 = order.insertorder(basicDBObject);
+
+
+            if (basicDBObject2 != null) {
+
+                // add to table
+                Order_table_data.add(new Order_Table(basicDBObject2.get("_id").toString(),
+                        basicDBObject2.get("name").toString(),
+                        Double.parseDouble(basicDBObject2.get("amount").toString()),
+                        Double.parseDouble(basicDBObject2.get("cost").toString()),
+                        basicDBObject2.get("date").toString()
+
+                ));
+
+                final TreeItem<Order_Table> rootorder = new RecursiveTreeItem<Order_Table>(Order_table_data, RecursiveTreeObject::getChildren);
+                order_table_view.setRoot(rootorder);
+
+
+            }
+
+
+        }
+        // reset fielsd
+        order_amount_text.setText("");
+        order_product_name_wanted.getEditor().setText("");
+        order_date1.getEditor().clear();
+
+    }
+
+
+
+
+
+
+
+    ////////////////////////////////////////////////SEARCH//////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    @FXML
+    private ComboBox<String> search_name;
+
+    @FXML
+    private ComboBox<String> search_employee_name;
+
+    @FXML
+    private ComboBox<String> search_subblier_name;
+
+    @FXML
+    private ComboBox<String> search_arr_date;
+
+    @FXML
+    private ComboBox<String> search_req_date;
+
+
+    ObservableList<String> arr_date = FXCollections.observableArrayList();
+    ObservableList<String> req_date = FXCollections.observableArrayList();
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        //
+
+        List<DBObject> dbObjects3 = product.selectproducts();
+        Product_names.clear();
+        for (int i = 0; i < dbObjects3.size(); i++) {
+
+            DBObject obj = dbObjects3.get(i);
+            Product_names.add(obj.get("name").toString());
+            p_ids.add(obj.get("_id").toString());
+            arr_date.add(obj.get("arr_date").toString());
+            req_date.add(obj.get("req_date").toString());
+
+            ///////
+            // select SupplierName
+            String subblierId = obj.get("product_subblier_id").toString();
+
+            // select EmployeeName
+            String employeeId = obj.get("product_employee_id").toString();
+
+            DBObject subblierObject = subblier.selectSupplierById(subblierId);
+            DBObject employeeObject = employee.selectEmployeeById(employeeId);
+
+
+            subblier_names.add(subblierObject.get("name").toString());
+            employee_names_names.add(subblierObject.get("name").toString());
+
+
+
+        }
+
+
         supplierUpdate.setDisable(true);
         update_employee.setDisable(true);
         update_product.setDisable(true);
         //
         product_employee_name.setItems(employee_names_names);
         product_subblier_name.setItems(subblier_names);
+        order_product_name_wanted.setItems(Product_names);
+        search_name.setItems(Product_names);
+        search_employee_name.setItems(employee_names_names);
+        search_subblier_name.setItems(subblier_names);
+        search_arr_date.setItems(arr_date);
+        search_req_date.setItems(req_date);
+
+
 
 
         // initialize subblier table
@@ -852,7 +1030,7 @@ public class container_controller implements Initializable {
         });
 
 
-        // ***********************  select all supplier database ***********************
+        // ***********************  select all employee database ***********************
 
         List<DBObject> objects = employee.selectemployees();
 
@@ -958,12 +1136,79 @@ public class container_controller implements Initializable {
 
 
         }
+
         // *********************************************************
 
 
         final TreeItem<ProductTable> rootproduct = new RecursiveTreeItem<ProductTable>(Product_Table_Data, RecursiveTreeObject::getChildren);
         product_table_view.setRoot(rootproduct);
         product_table_view.setShowRoot(false);
+
+
+        /////////////////////////////////////////// initialize order table //////////////////////////////////////////
+
+
+
+
+        order_name_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Order_Table, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Order_Table, String> param) {
+                return param.getValue().getValue().order_name;
+            }
+
+        });
+        order_amount_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Order_Table, Double>, ObservableValue<Double>>() {
+            @Override
+            public ObservableValue<Double> call(TreeTableColumn.CellDataFeatures<Order_Table, Double> param) {
+                return param.getValue().getValue().amount.asObject();
+            }
+
+        });
+
+        order_cost_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Order_Table, Double>, ObservableValue<Double>>() {
+            @Override
+            public ObservableValue<Double> call(TreeTableColumn.CellDataFeatures<Order_Table, Double> param) {
+                return param.getValue().getValue().cost.asObject();
+            }
+
+        });
+        order_date_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Order_Table, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Order_Table, String > param) {
+                return param.getValue().getValue().date;
+            }
+
+        });
+
+
+
+
+        // ***********************  select all supplier database ***********************
+
+        List<DBObject> dbObj = order.selectorders();
+        System.out.println(dbObj);
+
+        for (int i = 0; i < dbObj.size(); i++) {
+
+            DBObject ee = dbObj.get(i);
+            Order_table_data.add(new Order_Table(ee.get("_id").toString(),
+                    ee.get("name").toString(),
+                    Double.parseDouble(ee.get("amount").toString()),
+                    Double.parseDouble(ee.get("cost").toString()),
+                    ee.get("date").toString()
+
+            ));
+
+        }
+        // *********************************************************
+
+
+        final TreeItem<Order_Table> rootorder = new RecursiveTreeItem<Order_Table>(Order_table_data, RecursiveTreeObject::getChildren);
+        order_table_view.setRoot(rootorder);
+        order_table_view.setShowRoot(false);
+
+
+
 
 
         // double Click Action subblier
@@ -1121,6 +1366,54 @@ public class container_controller implements Initializable {
 
 
         }
+    }
+
+
+    class Search_Table extends RecursiveTreeObject<Search_Table> {
+        SimpleStringProperty ps_id;
+        SimpleStringProperty ps_name;
+        SimpleStringProperty ps_subbliername;
+        SimpleStringProperty ps_employeename;
+        SimpleStringProperty ps_sell_price;
+        SimpleStringProperty ps_buy_price;
+        SimpleStringProperty ps_arr_date;
+        SimpleStringProperty ps_req_date;
+
+
+        public Search_Table(String id, String name, String p_subbliername, String p_employeename, String sellprice, String buyprice, String arr_date, String req_date) {
+            this.ps_id = new SimpleStringProperty(id);
+            this.ps_name = new SimpleStringProperty(name);
+            this.ps_subbliername = new SimpleStringProperty(p_subbliername);
+            this.ps_employeename = new SimpleStringProperty(p_employeename);
+            this.ps_sell_price = new SimpleStringProperty(sellprice);
+            this.ps_buy_price = new SimpleStringProperty(buyprice);
+            this.ps_arr_date = new SimpleStringProperty(arr_date);
+            this.ps_req_date = new SimpleStringProperty(req_date);
+
+
+        }
+
+
+    }
+
+    class Order_Table extends RecursiveTreeObject<Order_Table> {
+        SimpleStringProperty order_id;
+        SimpleStringProperty order_name;
+        SimpleDoubleProperty amount;
+        SimpleDoubleProperty cost;
+        SimpleStringProperty date;
+
+
+        public Order_Table(String id, String name, Double amount, Double cost, String date) {
+            this.order_id = new SimpleStringProperty(id);
+            this.order_name = new SimpleStringProperty(name);
+            this.amount = new SimpleDoubleProperty(amount);
+            this.cost = new SimpleDoubleProperty(cost);
+            this.date = new SimpleStringProperty(date);
+
+
+        }
+
     }
 }
 
