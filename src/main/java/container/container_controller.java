@@ -24,7 +24,6 @@ import mongo.employee;
 import mongo.order;
 import mongo.product;
 import mongo.subblier;
-
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -315,7 +314,6 @@ public class container_controller implements Initializable {
 
 
             BasicDBObject basicDBObject2 = employee.insertemployee(basicDBObject);
-            System.out.println(basicDBObject2.get("name").toString());
 
             if (basicDBObject2 != null) {
 
@@ -740,6 +738,7 @@ public class container_controller implements Initializable {
             employee_Ids.add(obj.get("_id").toString());
 
         }
+
     }
 
 
@@ -1049,7 +1048,6 @@ public class container_controller implements Initializable {
 
         String name = search_name.getSelectionModel().getSelectedItem().toString();
         List<DBObject> dbObject_p = product.selectproduct_byname(name);
-        System.out.println(dbObject_p);
 
         for (int i = 0; i < dbObject_p.size(); i++) {
 
@@ -1087,12 +1085,197 @@ public class container_controller implements Initializable {
     @FXML
     void search_employee_name_action(ActionEvent event) {
 
+
+        Search_Table_Data.clear();
+
+
+        List<DBObject> dbObjects3 = employee.selectemployees();
+        ArrayList<String> ids = new ArrayList<>();
+
+        for (int i = 0; i < dbObjects3.size(); i++) {
+
+            DBObject obj = dbObjects3.get(i);
+
+            ids.add(obj.get("_id").toString());
+
+
+        }
+
+
+        int index = search_employee_name.getSelectionModel().getSelectedIndex();
+        String id = ids.get(index);
+
+
+
+        ////////////////
+
+
+        List<DBObject> dbObject_p = product.selectproductby_employeeid(id);
+
+
+        if(dbObject_p==null ){
+
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "not found");
+
+
+        }
+        else {
+
+
+            for (int i = 0; i < dbObject_p.size(); i++) {
+
+                DBObject ee = dbObject_p.get(i);
+
+
+                // select SupplierName
+                String subblierId = ee.get("product_subblier_id").toString();
+
+                // select EmployeeName
+                String employeeId = ee.get("product_employee_id").toString();
+
+
+                DBObject subblierObject = subblier.selectSupplierById(subblierId);
+                DBObject employeeObject = employee.selectEmployeeById(employeeId);
+
+
+                Search_Table_Data.add(new Search_Table(ee.get("_id").toString(),
+                        ee.get("name").toString(),
+                        subblierObject.get("name").toString(),
+                        employeeObject.get("name").toString(),
+                        ee.get("sellprice").toString(),
+                        ee.get("buyprice").toString(),
+                        ee.get("arr_date").toString(),
+                        ee.get("req_date").toString()));
+
+
+            }
+        }
+
+            final TreeItem<Search_Table> rootsearch = new RecursiveTreeItem<Search_Table>(Search_Table_Data, RecursiveTreeObject::getChildren);
+            search_tableview.setRoot(rootsearch);
+
+
+
+
+
     }
 
     @FXML
     void search_subblier_name_action(ActionEvent event) {
 
+         Search_Table_Data.clear();
+
+        List<DBObject> dbObjects3 = subblier.selectAllSubbliser();
+        ArrayList<String> ids = new ArrayList<>();
+
+        for (int i = 0; i < dbObjects3.size(); i++) {
+
+            DBObject obj = dbObjects3.get(i);
+
+            ids.add(obj.get("_id").toString());
+
+
         }
+
+        int index = search_subblier_name.getSelectionModel().getSelectedIndex();
+
+        String id = ids.get(index);
+
+        ////////////////
+
+
+        List<DBObject> dbObject_p = product.selectproductby_subblierid(id);
+
+        System.out.println(dbObject_p);
+
+        if(dbObject_p==null ){
+
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "not found");
+
+        }
+        else {
+
+            for (int i = 0; i < dbObject_p.size(); i++) {
+
+                DBObject ee = dbObject_p.get(i);
+
+
+                // select SupplierName
+                String subblierId = ee.get("product_subblier_id").toString();
+
+                // select EmployeeName
+                String employeeId = ee.get("product_employee_id").toString();
+
+
+                DBObject subblierObject = subblier.selectSupplierById(subblierId);
+                DBObject employeeObject = employee.selectEmployeeById(employeeId);
+
+
+                Search_Table_Data.add(new Search_Table(ee.get("_id").toString(),
+                        ee.get("name").toString(),
+                        subblierObject.get("name").toString(),
+                        employeeObject.get("name").toString(),
+                        ee.get("sellprice").toString(),
+                        ee.get("buyprice").toString(),
+                        ee.get("arr_date").toString(),
+                        ee.get("req_date").toString()));
+
+
+            }
+        }
+            final TreeItem<Search_Table> rootsearch = new RecursiveTreeItem<Search_Table>(Search_Table_Data, RecursiveTreeObject::getChildren);
+            search_tableview.setRoot(rootsearch);
+
+
+        }
+
+
+
+
+
+    @FXML
+    void search_by_name_mouse_clicked(MouseEvent event) {
+
+        List<DBObject> names  = product.selectproducts();
+        Product_names.clear();
+        for (int i =0 ;  i < names.size();i++){
+            DBObject o = names.get(i);
+            Product_names.add(o.get("name").toString());
+        }
+
+
+    }
+
+
+    @FXML
+    void search_by_subname_mouse_clicked(MouseEvent event) {
+
+        List<DBObject> names  = subblier.selectAllSubbliser();
+        subblier_names.clear();
+        for (int i =0 ;  i < names.size();i++){
+            DBObject o = names.get(i);
+            subblier_names.add(o.get("name").toString());
+        }
+
+    }
+    @FXML
+
+
+
+    void search_by_empname_mouse_clicked(MouseEvent event) {
+
+        List<DBObject> names  = employee.selectemployees();
+        employee_names_names.clear();
+        for (int i =0 ;  i < names.size();i++){
+            DBObject o = names.get(i);
+            employee_names_names.add(o.get("name").toString());
+        }
+
+    }
+
+
+
+
 
 
 
@@ -1107,32 +1290,12 @@ public class container_controller implements Initializable {
         for (int i = 0; i < dbObjects3.size(); i++) {
 
             DBObject obj = dbObjects3.get(i);
-            Product_names.add(obj.get("name").toString());
             p_ids.add(obj.get("_id").toString());
             arr_date.add(obj.get("arr_date").toString());
             req_date.add(obj.get("req_date").toString());
 
-            ///////
-            // select SupplierName
-            String subblierId = obj.get("product_subblier_id").toString();
-
-            // select EmployeeName
-            String employeeId = obj.get("product_employee_id").toString();
-
-            DBObject subblierObject = subblier.selectSupplierById(subblierId);
-            DBObject employeeObject = employee.selectEmployeeById(employeeId);
-
-
-            subblier_names.add(subblierObject.get("name").toString());
-            employee_names_names.add(subblierObject.get("name").toString());
-
-
 
         }
-
-
-
-
 
 
         supplierUpdate.setDisable(true);

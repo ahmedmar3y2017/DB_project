@@ -39,9 +39,9 @@
                         <Label layoutX="626.0" layoutY="36.0" text="search by arrival date" />
                         <Label layoutX="422.0" layoutY="36.0" text="search by employee name" />
                         <Label layoutX="231.0" layoutY="36.0" text="search by supplier name" />
-                        <ComboBox fx:id="search_name" layoutX="14.0" layoutY="72.0" onAction="#search_by_name_action" prefHeight="32.0" prefWidth="103.0" />
-                        <ComboBox fx:id="search_employee_name" layoutX="422.0" layoutY="72.0" onAction="#search_employee_name_action" prefHeight="32.0" prefWidth="119.0" />
-                        <ComboBox fx:id="search_subblier_name" layoutX="232.0" layoutY="72.0" onAction="#search_subblier_name_action" prefHeight="32.0" prefWidth="111.0" />
+                        <ComboBox fx:id="search_name" layoutX="14.0" layoutY="72.0" onAction="#search_by_name_action" onMouseClicked="#search_by_name_mouse_clicked" prefHeight="32.0" prefWidth="103.0" />
+                        <ComboBox fx:id="search_employee_name" layoutX="422.0" layoutY="72.0" onAction="#search_employee_name_action" onMouseClicked="#search_by_empname_mouse_clicked" prefHeight="32.0" prefWidth="119.0" />
+                        <ComboBox fx:id="search_subblier_name" layoutX="232.0" layoutY="72.0" onAction="#search_subblier_name_action" onMouseClicked="#search_by_subname_mouse_clicked" prefHeight="32.0" prefWidth="111.0" />
                         <DatePicker fx:id="search_arr_date" layoutX="626.0" layoutY="76.0" onAction="#search_arr_date_action" prefHeight="25.0" prefWidth="121.0" />
                         <DatePicker fx:id="search_req_date" layoutX="817.0" layoutY="76.0" onAction="#search_req_date_action" prefHeight="25.0" prefWidth="120.0" />
                      </children>

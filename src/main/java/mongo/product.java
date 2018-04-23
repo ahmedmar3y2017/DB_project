@@ -80,9 +80,9 @@ public class product {
 
     }
 
-    public static List<DBObject> selectproductby_subblierid(String name) {
+    public static List<DBObject> selectproductby_subblierid(String id) {
         BasicDBObject searchQuery = new BasicDBObject();
-        searchQuery.put("product_subblier_id", name);
+        searchQuery.put("product_subblier_id", id);
         DBCursor cursor = dbCollection.find(searchQuery);
         List<DBObject> retreived = null;
 
@@ -93,9 +93,9 @@ public class product {
 
     }
 
-    public static List<DBObject> selectproductby_employeeid(String name) {
+    public static List<DBObject> selectproductby_employeeid(String id) {
         BasicDBObject searchQuery = new BasicDBObject();
-        searchQuery.put("product_employee_id", name);
+        searchQuery.put("product_employee_id", id);
         DBCursor cursor = dbCollection.find(searchQuery);
         List<DBObject> retreived = null;
 

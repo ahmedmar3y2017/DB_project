@@ -69,34 +69,13 @@ public class subblier {
     }
 
 
-    // select by Name
-    public static DBObject selectSupplierByName(String name) {
-
-        BasicDBObject basicDBObject = new BasicDBObject();
-        basicDBObject.put("name", name);
-
-        DBObject dbObjectRetrieved = dbCollection.findOne(basicDBObject);
-
-        return dbObjectRetrieved;
-
-
-    }
-
-    public static List<DBObject> select_sub_byname(String name) {
-        BasicDBObject searchQuery = new BasicDBObject();
-        searchQuery.put("name", name);
-        DBCursor cursor = dbCollection.find(searchQuery);
-        List<DBObject> retreived = null;
-
-        while (cursor.hasNext()) {
-            retreived = cursor.toArray();
-        }
-        return retreived;
-
-    }
-
 
 
 
     }
+
+
+
+
+
 
