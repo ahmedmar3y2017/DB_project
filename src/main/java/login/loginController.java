@@ -1,6 +1,8 @@
 package login;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import dialog.dialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +18,7 @@ import mongo.login;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -51,8 +54,53 @@ public class loginController implements Initializable {
     @FXML
     void sign_in_button_action(ActionEvent event) {
 
+        List<DBObject> list=null;
+        List<DBObject> list2=null;
+
+
+        if (phone_text_sign_in.getText().trim().isEmpty()
+                || pass_text_sign_in.getText().trim().isEmpty()
+                || type_sign_in.getSelectionModel().getSelectedItem().equals(null)
+                ) {
+
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "all login data is required");
+
+        } else {
+             list = login.selectuser_by_type("user") ;
+             list2 = login.selectuser_by_type("admin") ;
+           // System.out.println(list + "\n " + list2);
+        }
+
+        /////////////////////////////////////////////////////////////////////////
+
+        for (int i = 0; i<list.size();i++){
+            DBObject object = list.get(i);
+            if (phone_text_sign_in.getText().equals(object.get("phone"))
+                    && pass_text_sign_in.getText().equals(object.get("pass"))
+                    && type_sign_in.getSelectionModel().getSelectedItem().equals("user")){
+                System.out.println("user login");
+            }
+        }
+
+        //////////////////////////////////////////////////////////////////////////
+
+        for (int i = 0; i<list2.size();i++){
+            DBObject object = list2.get(i);
+            if (phone_text_sign_in.getText().equals(object.get("phone"))
+                    && pass_text_sign_in.getText().equals(object.get("pass"))
+                    && type_sign_in.getSelectionModel().getSelectedItem().equals("admin")){
+                System.out.println("admin login");
+            }
+        }
+
+
 
     }
+
+
+
+
+
 
     @FXML
     void sign_up_button_action(ActionEvent event) {
@@ -100,8 +148,11 @@ public class loginController implements Initializable {
             users.add("user");
             users.add("admin");
             type_sign_up.setItems(users);
+            type_sign_in.setItems(users);
 
         }
+
+
 
     }
 

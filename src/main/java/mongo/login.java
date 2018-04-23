@@ -1,8 +1,8 @@
 package mongo;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.*;
+
+import java.util.List;
 
 public class login {
     MongoClient mongoClient = new MongoClient("localhost", 27017);
@@ -17,5 +17,28 @@ public class login {
         dbCollection.insert(basicDBObject);
         return basicDBObject;
     }
+
+
+    // select All users
+    public static List<DBObject> selectusers() {
+        DBCursor dbObjects = dbCollection.find();
+        return dbObjects.toArray();
+    }
+
+
+
+    public static List<DBObject> selectuser_by_type(String name) {
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("type", name);
+        DBCursor cursor = dbCollection.find(searchQuery);
+        List<DBObject> retreived = null;
+
+        while (cursor.hasNext()) {
+            retreived = cursor.toArray();
+        }
+        return retreived;
+
+    }
+
 
 }
