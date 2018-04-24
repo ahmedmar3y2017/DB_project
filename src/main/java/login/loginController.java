@@ -92,6 +92,9 @@ public class loginController implements Initializable {
                 System.out.println("admin login");
             }
         }
+        phone_text_sign_in.setText("");
+        pass_text_sign_in.setText("");
+        type_sign_in.setValue(null);
 
 
 
@@ -115,9 +118,11 @@ public class loginController implements Initializable {
                 ) {
             dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "enter all data");
 
-        } else {
+        }
 
-            // insert into emp database
+        else {
+
+            // insert into user database
 
             BasicDBObject basicDBObject = new BasicDBObject();
             basicDBObject.put("name", name_text_sign_up.getText());
