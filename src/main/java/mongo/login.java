@@ -19,6 +19,8 @@ public class login {
     }
 
 
+
+
     // select All users
     public static List<DBObject> selectusers() {
         DBCursor dbObjects = dbCollection.find();
@@ -44,6 +46,20 @@ public class login {
 
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put("phone", text);
+        DBObject dbObject = dbCollection.findOne(searchQuery);
+
+        return dbObject;
+
+
+    }
+
+
+
+    public static DBObject selectuser_by_Phone_password (String phone,String password) {
+
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("phone", phone);
+        searchQuery.put("pass" ,password);
         DBObject dbObject = dbCollection.findOne(searchQuery);
 
         return dbObject;

@@ -12,11 +12,9 @@
       <Label layoutX="660.0" layoutY="60.0" scaleX="1.5" scaleY="2.0" text="new user ?   sign up" />
       <Label layoutX="90.0" layoutY="150.0" text="phone" />
       <Label layoutX="90.0" layoutY="200.0" text="password" />
-      <Label layoutX="90.0" layoutY="250.0" text="sign in as :" />
       <TextField fx:id="phone_text_sign_in" layoutX="170.0" layoutY="150.0" />
       <TextField fx:id="pass_text_sign_in" layoutX="170.0" layoutY="200.0" />
-      <ComboBox fx:id="type_sign_in" layoutX="170.0" layoutY="250.0" prefWidth="150.0" />
-      <Button fx:id="sign_in_button" layoutX="170.0" layoutY="380.0" mnemonicParsing="false" onAction="#sign_in_button_action" styleClass="round-red" text="sign in" />
+      <Button fx:id="sign_in_button" layoutX="170.0" layoutY="346.0" mnemonicParsing="false" onAction="#sign_in_button_action" styleClass="round-red" text="sign in" />
       <Label layoutX="605.0" layoutY="150.0" text="Name" />
       <Label layoutX="605.0" layoutY="250.0" text="Password" />
       <Label layoutX="605.0" layoutY="300.0" text="Address" />
