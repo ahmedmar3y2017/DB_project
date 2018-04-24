@@ -51,8 +51,8 @@ public class loginController implements Initializable {
     @FXML
     void sign_in_button_action(ActionEvent event) {
 
-        List<DBObject> list=null;
-        List<DBObject> list2=null;
+        List<DBObject> list = null;
+        List<DBObject> list2 = null;
 
 
         if (phone_text_sign_in.getText().trim().isEmpty()
@@ -63,31 +63,31 @@ public class loginController implements Initializable {
             dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "all login data is required");
 
         } else {
-             list = login.selectuser_by_type("user") ;
-             list2 = login.selectuser_by_type("admin") ;
-           // System.out.println(list + "\n " + list2);
+            list = login.selectuser_by_type("user");
+            list2 = login.selectuser_by_type("admin");
+            // System.out.println(list + "\n " + list2);
         }
 
         /////////////////////////////////////////////////////////////////////////
 
-        for (int i = 0; i<list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
 
             DBObject object = list.get(i);
 
             if (phone_text_sign_in.getText().equals(object.get("phone"))
                     && pass_text_sign_in.getText().equals(object.get("pass"))
-                    && type_sign_in.getSelectionModel().getSelectedItem().equals("user")){
+                    && type_sign_in.getSelectionModel().getSelectedItem().equals("user")) {
                 System.out.println("user login");
             }
         }
 
         //////////////////////////////////////////////////////////////////////////
 
-        for (int i = 0; i<list2.size();i++){
+        for (int i = 0; i < list2.size(); i++) {
             DBObject object = list2.get(i);
             if (phone_text_sign_in.getText().equals(object.get("phone"))
                     && pass_text_sign_in.getText().equals(object.get("pass"))
-                    && type_sign_in.getSelectionModel().getSelectedItem().equals("admin")){
+                    && type_sign_in.getSelectionModel().getSelectedItem().equals("admin")) {
                 System.out.println("admin login");
             }
         }
@@ -96,20 +96,16 @@ public class loginController implements Initializable {
         type_sign_in.setValue(null);
 
 
-
     }
-
 
 
     @FXML
     void sign_up_button_action(ActionEvent event) {
 
-        List<DBObject> list = login.selectuser_by_type("user") ;
-        List<DBObject> list2 = login.selectuser_by_type("admin") ;
+        List<DBObject> list = login.selectuser_by_type("user");
+        List<DBObject> list2 = login.selectuser_by_type("admin");
 
-
-
-
+        // updated
 
         if (name_text_sign_up.getText().trim().isEmpty()
                 || phone_text_sign_up.getText().trim().isEmpty()
@@ -120,19 +116,11 @@ public class loginController implements Initializable {
                 ) {
             dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "enter all data");
 
-        }
+        } else {
+// check phone
+            DBObject ObjectUser = login.selectuser_byPhone(phone_text_sign_up.getText());
+            if (ObjectUser == null) {
 
-
-
-
-        for (int i = 0; i<list.size();i++) {
-            DBObject object = list.get(i);
-            if (phone_text_sign_up.getText().equals(object.get("phone"))
-                    && type_sign_up.getSelectionModel().getSelectedItem().equals("user")) {
-                dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "phone already existed");
-            } else {
-
-                // insert into user database
 
                 BasicDBObject basicDBObject = new BasicDBObject();
                 basicDBObject.put("name", name_text_sign_up.getText());
@@ -146,60 +134,40 @@ public class loginController implements Initializable {
 
                 dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "new user added");
 
+                name_text_sign_up.setText("");
+                phone_text_sign_up.setText("");
+                pass_text_sign_up.setText("");
+                address_text_sign_up.setText("");
+                type_sign_up.setValue(null);
+
+
+            } else {
+                // to focus textField
+                phone_text_sign_up.requestFocus();
+                dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "phone already existed");
+
             }
+
+
         }
 
 
-
-            for (int i = 0; i<list2.size();i++) {
-                DBObject object = list2.get(i);
-                if (phone_text_sign_up.getText().equals(object.get("phone"))
-                        && type_sign_up.getSelectionModel().getSelectedItem().equals("admin")) {
-                    dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "phone already existed");
-                }
-
-
-                else {
-
-                    // insert into user database
-
-                    BasicDBObject basicDBObject = new BasicDBObject();
-                    basicDBObject.put("name", name_text_sign_up.getText());
-                    basicDBObject.put("address", address_text_sign_up.getText());
-                    basicDBObject.put("phone", phone_text_sign_up.getText());
-                    basicDBObject.put("pass", pass_text_sign_up.getText());
-                    basicDBObject.put("type", type_sign_up.getSelectionModel().getSelectedItem());
-
-
-                    BasicDBObject basicDBObject2 = login.insertuser(basicDBObject);
-
-                    dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "new user added");
-
-                }
-            }
-
-        name_text_sign_up.setText("");
-        phone_text_sign_up.setText("");
-        pass_text_sign_up.setText("");
-        address_text_sign_up.setText("");
-        type_sign_up.setValue(null);
     }
 
     ObservableList<String> users = FXCollections.observableArrayList();
 
 
-        @Override
-        public void initialize (URL url, ResourceBundle rb){
-            users.add("user");
-            users.add("admin");
-            type_sign_up.setItems(users);
-            type_sign_in.setItems(users);
-
-        }
-
-
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        users.add("user");
+        users.add("admin");
+        type_sign_up.setItems(users);
+        type_sign_in.setItems(users);
 
     }
+
+
+}
 
 
 

@@ -12,7 +12,7 @@ public class login {
 
 
     // insert into database
-    public static BasicDBObject insertuser (BasicDBObject basicDBObject) {
+    public static BasicDBObject insertuser(BasicDBObject basicDBObject) {
 
         dbCollection.insert(basicDBObject);
         return basicDBObject;
@@ -24,7 +24,6 @@ public class login {
         DBCursor dbObjects = dbCollection.find();
         return dbObjects.toArray();
     }
-
 
 
     public static List<DBObject> selectuser_by_type(String name) {
@@ -41,4 +40,14 @@ public class login {
     }
 
 
+    public static DBObject selectuser_byPhone(String text) {
+
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put("phone", text);
+        DBObject dbObject = dbCollection.findOne(searchQuery);
+
+        return dbObject;
+
+
+    }
 }
