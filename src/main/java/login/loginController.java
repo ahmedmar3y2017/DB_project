@@ -2,6 +2,7 @@ package login;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import container.startContainer;
 import dialog.dialog;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,7 +12,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import mongo.login;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -40,23 +44,28 @@ public class loginController implements Initializable {
 
 
     @FXML
-    void sign_in_button_action(ActionEvent event) {
+    void sign_in_button_action(ActionEvent event) throws IOException {
 
         DBObject object = login.selectuser_by_Phone_password(phone_text_sign_in.getText().toString()
-                ,pass_text_sign_in.getText().toString());
-      //  System.out.println(object);
+                , pass_text_sign_in.getText().toString());
+        //  System.out.println(object);
 
-    if (phone_text_sign_in.getText().trim().isEmpty()
-            && pass_text_sign_in.getText().trim().isEmpty()){
-        dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "login data is required");
-    }
-    else if (object==null){
-        dialog dialog = new dialog(Alert.AlertType.WARNING, "error", " user not found");
+        if (phone_text_sign_in.getText().trim().isEmpty()
+                && pass_text_sign_in.getText().trim().isEmpty()) {
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "login data is required");
+        } else if (object == null) {
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", " user not found");
 
-    }
-    else {
-        System.out.println("login done");
-    }
+        } else {
+
+
+//close this stage
+            ((Stage) type_sign_up.getScene().getWindow()).close();
+//open another Stage
+            startContainer startContainer = new startContainer();
+
+
+        }
 
 
     }
@@ -78,7 +87,7 @@ public class loginController implements Initializable {
             dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "enter all data");
 
         } else {
-         // check phone
+            // check phone
             DBObject ObjectUser = login.selectuser_byPhone(phone_text_sign_up.getText());
             if (ObjectUser == null) {
 
