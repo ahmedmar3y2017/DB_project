@@ -33,9 +33,6 @@ public class loginController implements Initializable {
     private ComboBox<String> type_sign_in;
 
     @FXML
-    private Button sign_in_button;
-
-    @FXML
     private TextField name_text_sign_up;
 
     @FXML
@@ -74,7 +71,9 @@ public class loginController implements Initializable {
         /////////////////////////////////////////////////////////////////////////
 
         for (int i = 0; i<list.size();i++){
+
             DBObject object = list.get(i);
+
             if (phone_text_sign_in.getText().equals(object.get("phone"))
                     && pass_text_sign_in.getText().equals(object.get("pass"))
                     && type_sign_in.getSelectionModel().getSelectedItem().equals("user")){
@@ -102,11 +101,14 @@ public class loginController implements Initializable {
 
 
 
-
-
-
     @FXML
     void sign_up_button_action(ActionEvent event) {
+
+        List<DBObject> list = login.selectuser_by_type("user") ;
+        List<DBObject> list2 = login.selectuser_by_type("admin") ;
+
+
+
 
 
         if (name_text_sign_up.getText().trim().isEmpty()
@@ -120,23 +122,61 @@ public class loginController implements Initializable {
 
         }
 
-        else {
-
-            // insert into user database
-
-            BasicDBObject basicDBObject = new BasicDBObject();
-            basicDBObject.put("name", name_text_sign_up.getText());
-            basicDBObject.put("address", address_text_sign_up.getText());
-            basicDBObject.put("phone", phone_text_sign_up.getText());
-            basicDBObject.put("pass", pass_text_sign_up.getText());
-            basicDBObject.put("type", type_sign_up.getSelectionModel().getSelectedItem());
 
 
-            BasicDBObject basicDBObject2 = login.insertuser(basicDBObject);
 
-            dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "new user added");
+        for (int i = 0; i<list.size();i++) {
+            DBObject object = list.get(i);
+            if (phone_text_sign_up.getText().equals(object.get("phone"))
+                    && type_sign_up.getSelectionModel().getSelectedItem().equals("user")) {
+                dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "phone already existed");
+            } else {
 
+                // insert into user database
+
+                BasicDBObject basicDBObject = new BasicDBObject();
+                basicDBObject.put("name", name_text_sign_up.getText());
+                basicDBObject.put("address", address_text_sign_up.getText());
+                basicDBObject.put("phone", phone_text_sign_up.getText());
+                basicDBObject.put("pass", pass_text_sign_up.getText());
+                basicDBObject.put("type", type_sign_up.getSelectionModel().getSelectedItem());
+
+
+                BasicDBObject basicDBObject2 = login.insertuser(basicDBObject);
+
+                dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "new user added");
+
+            }
         }
+
+
+
+            for (int i = 0; i<list2.size();i++) {
+                DBObject object = list2.get(i);
+                if (phone_text_sign_up.getText().equals(object.get("phone"))
+                        && type_sign_up.getSelectionModel().getSelectedItem().equals("admin")) {
+                    dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "phone already existed");
+                }
+
+
+                else {
+
+                    // insert into user database
+
+                    BasicDBObject basicDBObject = new BasicDBObject();
+                    basicDBObject.put("name", name_text_sign_up.getText());
+                    basicDBObject.put("address", address_text_sign_up.getText());
+                    basicDBObject.put("phone", phone_text_sign_up.getText());
+                    basicDBObject.put("pass", pass_text_sign_up.getText());
+                    basicDBObject.put("type", type_sign_up.getSelectionModel().getSelectedItem());
+
+
+                    BasicDBObject basicDBObject2 = login.insertuser(basicDBObject);
+
+                    dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "new user added");
+
+                }
+            }
 
         name_text_sign_up.setText("");
         phone_text_sign_up.setText("");
