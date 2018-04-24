@@ -102,8 +102,6 @@ public class loginController implements Initializable {
     @FXML
     void sign_up_button_action(ActionEvent event) {
 
-        List<DBObject> list = login.selectuser_by_type("user");
-        List<DBObject> list2 = login.selectuser_by_type("admin");
 
         // updated
 
