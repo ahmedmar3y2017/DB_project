@@ -123,7 +123,7 @@
                 </content>
             </Tab>
 
-            <Tab fx:id="subblier_tab" text="Subblier">
+            <Tab fx:id="subblier_tab" text="Supplier">
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="600.0" prefWidth="1000.0">
                         <children>
@@ -170,7 +170,7 @@
                               <TreeTableColumn fx:id="order_date_col" prefWidth="140.0" text="Ordering_date" />
                           </columns>
                         </TreeTableView>
-                        <Button layoutX="180.0" layoutY="369.0" mnemonicParsing="false" styleClass="round-red" text="Remove" />
+                        <Button layoutX="180.0" layoutY="369.0" mnemonicParsing="false" onAction="#remove_order_action" styleClass="round-red" text="Remove" />
                         <Button fx:id="cancel_order" layoutX="848.0" layoutY="305.0" mnemonicParsing="false" onAction="#cancel_order_action" prefHeight="25.0" prefWidth="80.0" styleClass="round-red" text="Cancel" />
                         <Label layoutX="594.0" layoutY="72.0" scaleX="1.5" scaleY="3.0" text="make new order" />
                         <Label layoutX="839.0" layoutY="72.0" scaleX="1.5" scaleY="3.0" text="cancel order" />

@@ -69,7 +69,6 @@ public class loginController implements Initializable {
             String phone = object.get("phone").toString();
             String address = object.get("address").toString();
 
-            System.out.println(Id+"\n"+name + "\n"+type);
 
 
 

@@ -122,6 +122,8 @@ public class product {
 
 
 
+
+
     public static List<DBObject> selectproductby_reqdate(String name) {
         BasicDBObject searchQuery = new BasicDBObject();
         searchQuery.put("req_date", name);
@@ -134,6 +136,8 @@ public class product {
         return retreived;
 
     }
+
+
 
 }
 
