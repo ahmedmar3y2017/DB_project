@@ -89,9 +89,6 @@ public class container_controller implements Initializable {
 
 
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
     /////////////////////////////////////////// Subblier ////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,6 +172,7 @@ public class container_controller implements Initializable {
 
 
             }
+
 
 
         }
@@ -380,7 +378,7 @@ public class container_controller implements Initializable {
                 employee_table.setRoot(rootemp);
 
 
-                dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "  new employee is added");
+                dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "Done", "  new employee is added");
 
 
                 // reset Fields
@@ -441,6 +439,8 @@ public class container_controller implements Initializable {
 
 
             }
+
+
 
 
         }
@@ -643,7 +643,7 @@ public class container_controller implements Initializable {
             }
 
 
-            dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "  new product is added");
+            dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "Done", "  new product is added");
 
 
             this.product_name.setText("");
@@ -675,24 +675,6 @@ public class container_controller implements Initializable {
 
         } else {
 
-
-            List<DBObject> dbObjects2 = subblier.selectAllSubbliser();
-
-            for (int i = 0; i < dbObjects2.size(); i++) {
-
-                DBObject obj = dbObjects2.get(i);
-                subblier_Ids.add(obj.get("_id").toString());
-
-            }
-
-            List<DBObject> dbObjects3 = employee.selectemployees();
-
-            for (int i = 0; i < dbObjects3.size(); i++) {
-
-                DBObject obj = dbObjects3.get(i);
-                employee_Ids.add(obj.get("_id").toString());
-
-            }
 
             ProductTable produc_selected = product_table_view.getSelectionModel().getSelectedItem().getValue();
 
@@ -1423,11 +1405,6 @@ public class container_controller implements Initializable {
             p_ids.add(obj.get("_id").toString());
 
         }
-
-
-
-
-
 
 
         supplierUpdate.setDisable(true);
