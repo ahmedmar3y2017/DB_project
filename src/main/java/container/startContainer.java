@@ -13,12 +13,14 @@ import java.io.IOException;
 
 public class startContainer {
 
-    public startContainer(String id, String name, String type) throws IOException {
+    public startContainer(String id, String name, String type,String phone ,String address) throws IOException {
 
 
         container_controller.Userid = id;
         container_controller.Username = name;
         container_controller.Usertype = type;
+        container_controller.phone=phone;
+        container_controller.address=address;
 
         Stage stage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("/Fxml/main_screen.fxml"));
@@ -28,7 +30,7 @@ public class startContainer {
 
         stage.setScene(scene);
         stage.setResizable(false);
-        // for fade out
+          // for fade out
 //        stage.initStyle(StageStyle.TRANSPARENT); //Removes window decorations
         scene.setFill(Color.TRANSPARENT); //Makes scene background transparent
 

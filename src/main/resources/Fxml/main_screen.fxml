@@ -171,7 +171,7 @@
                           </columns>
                         </TreeTableView>
                         <Button layoutX="180.0" layoutY="369.0" mnemonicParsing="false" styleClass="round-red" text="Remove" />
-                        <Button layoutX="848.0" layoutY="305.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="80.0" styleClass="round-red" text="Cancel" />
+                        <Button fx:id="cancel_order" layoutX="848.0" layoutY="305.0" mnemonicParsing="false" onAction="#cancel_order_action" prefHeight="25.0" prefWidth="80.0" styleClass="round-red" text="Cancel" />
                         <Label layoutX="594.0" layoutY="72.0" scaleX="1.5" scaleY="3.0" text="make new order" />
                         <Label layoutX="839.0" layoutY="72.0" scaleX="1.5" scaleY="3.0" text="cancel order" />
                         <Label layoutX="494.0" layoutY="151.0" text="product_name" />
@@ -181,7 +181,7 @@
                         <TextField fx:id="order_amount_text" layoutX="592.0" layoutY="200.0" />
                         <DatePicker fx:id="order_date1" layoutX="592.0" layoutY="250.0" prefWidth="149.0" />
                         <ComboBox fx:id="order_product_name_wanted" layoutX="592.0" layoutY="143.0" onMouseClicked="#mouse" prefHeight="24.0" prefWidth="150.0" />
-                        <ComboBox fx:id="order_product_name_unwanted" layoutX="813.0" layoutY="209.0" prefWidth="150.0" />
+                        <ComboBox fx:id="order_product_name_unwanted" layoutX="813.0" layoutY="209.0" onMouseClicked="#cancel_order_mouse_clicked" prefWidth="150.0" />
 
                      </children></AnchorPane>
               </content>

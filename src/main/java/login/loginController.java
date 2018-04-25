@@ -2,7 +2,6 @@ package login;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import container.container_controller;
 import container.startContainer;
 import dialog.dialog;
 import javafx.collections.FXCollections;
@@ -67,12 +66,14 @@ public class loginController implements Initializable {
             String Id = object.get("_id").toString();
             String name = object.get("name").toString();
             String type = object.get("type").toString();
+            String phone = object.get("phone").toString();
+            String address = object.get("address").toString();
 
             System.out.println(Id+"\n"+name + "\n"+type);
 
 
 
-            startContainer startContainer = new startContainer(Id,name,type);
+            startContainer startContainer = new startContainer(Id,name,type,phone,address);
 
 
         }

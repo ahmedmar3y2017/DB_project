@@ -17,10 +17,10 @@ public class order {
         return basicDBObject;
     }
 
-
     // select orders
     public static List<DBObject> selectorders() {
         DBCursor dbObjects = dbCollection.find();
         return dbObjects.toArray();
+
     }
 }

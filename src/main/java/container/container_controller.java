@@ -20,6 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
+import login.loginController;
 import mongo.employee;
 import mongo.order;
 import mongo.product;
@@ -37,8 +38,6 @@ import java.util.ResourceBundle;
 public class container_controller implements Initializable {
 
 
-    /////////////////////////////////////////// Subblier ////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FXML
     private Label products_name_label;
 
@@ -48,6 +47,21 @@ public class container_controller implements Initializable {
     private Label subblier_name_label;
     @FXML
     private Label order_name_label;
+
+    @FXML
+    public Label search_name_label;
+
+
+    public static String Username;
+    public static String Userid;
+    public static String Usertype;
+    public static String phone;
+    public static String address;
+
+
+    /////////////////////////////////////////// Subblier ////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     @FXML
     private Button supplierAdd;
@@ -812,10 +826,16 @@ public class container_controller implements Initializable {
     private Button make_order;
 
     @FXML
+    private Button cancel_order;
+
+    @FXML
     private TextField order_amount_text;
 
     @FXML
     private DatePicker order_date1;
+
+    @FXML
+    private ComboBox<String> order_product_name_unwanted;
 
 
     @FXML
@@ -843,11 +863,21 @@ public class container_controller implements Initializable {
 
             // insert into order database
 
+
+            BasicDBObject user = new BasicDBObject();
+            user.put("id",Id);
+            user.put("name" , Username);
+            user.put("phone" , phone);
+            user.put("address" ,address);
+
+
             BasicDBObject basicDBObject = new BasicDBObject();
             basicDBObject.put("name", order_product_name_wanted.getSelectionModel().getSelectedItem());
             basicDBObject.put("amount", order_amount_text.getText());
             basicDBObject.put("cost", Double.parseDouble(price) * Double.parseDouble(order_amount_text.getText()));
             basicDBObject.put("date", new SimpleDateFormat("yyyy-MM-dd").format(orderDate));
+            basicDBObject.put("user_data",user);
+
 
 
             BasicDBObject basicDBObject2 = order.insertorder(basicDBObject);
@@ -881,6 +911,25 @@ public class container_controller implements Initializable {
         order_amount_text.setText("");
         order_product_name_wanted.setValue("");
         order_date1.setValue(null);
+
+    }
+
+    @FXML
+    void cancel_order_action(ActionEvent event) {
+
+
+    }
+
+    @FXML
+    void cancel_order_mouse_clicked(MouseEvent event) {
+
+        List<DBObject> orders = order.selectorders();
+        for (int i = 0; i < orders.size(); i++) {
+
+            DBObject object = orders.get(i);
+            order_names.add(object.get("name").toString());
+
+        }
 
     }
 
@@ -930,16 +979,12 @@ public class container_controller implements Initializable {
     @FXML
     private TreeTableColumn<Search_Table, String> search_req_col;
 
-    @FXML
-    public Label search_name_label;
 
-    ObservableList<String> arr_date = FXCollections.observableArrayList();
-    ObservableList<String> req_date = FXCollections.observableArrayList();
+
     ObservableList<Search_Table> Search_Table_Data = FXCollections.observableArrayList();
+    ObservableList<String> order_names = FXCollections.observableArrayList();
 
-    public static String Username;
-    public static String Userid;
-    public static String Usertype;
+
 
 
     @FXML
@@ -1264,7 +1309,17 @@ public class container_controller implements Initializable {
 
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle resources)
+    {
+
+        if (Usertype == "user"){
+            order_table_view.setVisible(false);
+        }
+        else {
+            make_order.setDisable(true);
+            cancel_order.setDisable(true);
+        }
+
 
         System.out.println("User Name is : " + Username);
         search_name_label.setText(Username);
@@ -1282,11 +1337,13 @@ public class container_controller implements Initializable {
 
             DBObject obj = dbObjects3.get(i);
             p_ids.add(obj.get("_id").toString());
-            arr_date.add(obj.get("arr_date").toString());
-            req_date.add(obj.get("req_date").toString());
-
 
         }
+
+
+
+
+
 
 
         supplierUpdate.setDisable(true);
@@ -1299,6 +1356,7 @@ public class container_controller implements Initializable {
         search_name.setItems(Product_names);
         search_employee_name.setItems(employee_names_names);
         search_subblier_name.setItems(subblier_names);
+        order_product_name_unwanted.setItems(order_names);
 
 
         // initialize subblier table
