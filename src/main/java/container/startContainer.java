@@ -6,15 +6,19 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import login.loginController;
 
 import java.io.IOException;
 
-/**
- * Created by ahmed mar3y on 24/04/2018.
- */
+
 public class startContainer {
 
-    public startContainer() throws IOException {
+    public startContainer(String id , String name , String type ) throws IOException {
+
+
+        loginController.id = id;
+        loginController.name = name;
+        loginController.type = type;
 
         Stage stage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("/Fxml/main_screen.fxml"));

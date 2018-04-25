@@ -2,6 +2,7 @@ package login;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import container.container_controller;
 import container.startContainer;
 import dialog.dialog;
 import javafx.collections.FXCollections;
@@ -42,6 +43,10 @@ public class loginController implements Initializable {
     @FXML
     private ComboBox type_sign_up;
 
+    public static String id  ;
+    public static String name  ;
+    public static String type  ;
+
 
     @FXML
     void sign_in_button_action(ActionEvent event) throws IOException {
@@ -62,7 +67,16 @@ public class loginController implements Initializable {
 //close this stage
             ((Stage) type_sign_up.getScene().getWindow()).close();
 //open another Stage
-            startContainer startContainer = new startContainer();
+            String Id = object.get("_id").toString();
+            String name = object.get("name").toString();
+            String type = object.get("type").toString();
+
+            System.out.println(Id+"\n"+name + "\n"+type);
+
+
+
+            startContainer startContainer = new startContainer(Id,name,type);
+            container_controller.search_name_label.setText(name);
 
 
         }

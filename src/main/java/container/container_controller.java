@@ -928,6 +928,9 @@ public class container_controller implements Initializable {
     @FXML
     private TreeTableColumn<Search_Table, String> search_req_col;
 
+    @FXML
+    public static Label search_name_label;
+
 
     ObservableList<String> arr_date = FXCollections.observableArrayList();
     ObservableList<String> req_date = FXCollections.observableArrayList();
