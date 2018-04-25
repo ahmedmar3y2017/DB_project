@@ -24,6 +24,7 @@ import mongo.employee;
 import mongo.order;
 import mongo.product;
 import mongo.subblier;
+
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -38,7 +39,15 @@ public class container_controller implements Initializable {
 
     /////////////////////////////////////////// Subblier ////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @FXML
+    private Label products_name_label;
 
+    @FXML
+    private Label employee_name_label;
+    @FXML
+    private Label subblier_name_label;
+    @FXML
+    private Label order_name_label;
 
     @FXML
     private Button supplierAdd;
@@ -593,7 +602,6 @@ public class container_controller implements Initializable {
             }
 
 
-
             dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "  new product is added");
 
 
@@ -602,7 +610,7 @@ public class container_controller implements Initializable {
             this.product_subblier_name.setValue("");
             this.product_sell_price.setText("");
             this.product_buy_price.setText("");
-            this. product_request_date.setValue(null);
+            this.product_request_date.setValue(null);
             this.product_arrival_date.setValue(null);
 
 
@@ -670,9 +678,8 @@ public class container_controller implements Initializable {
                 this.product_subblier_name.setValue("");
                 this.product_sell_price.setText("");
                 this.product_buy_price.setText("");
-                this. product_request_date.setValue(null);
+                this.product_request_date.setValue(null);
                 this.product_arrival_date.setValue(null);
-
 
 
             }
@@ -870,17 +877,12 @@ public class container_controller implements Initializable {
         }
 
 
-
         // reset fielsd
         order_amount_text.setText("");
         order_product_name_wanted.setValue("");
         order_date1.setValue(null);
 
     }
-
-
-
-
 
 
     ////////////////////////////////////////////////SEARCH//////////////////////////////////////////////////////////
@@ -929,66 +931,64 @@ public class container_controller implements Initializable {
     private TreeTableColumn<Search_Table, String> search_req_col;
 
     @FXML
-    public static Label search_name_label;
-
+    public Label search_name_label;
 
     ObservableList<String> arr_date = FXCollections.observableArrayList();
     ObservableList<String> req_date = FXCollections.observableArrayList();
     ObservableList<Search_Table> Search_Table_Data = FXCollections.observableArrayList();
 
+    public static String Username;
+    public static String Userid;
+    public static String Usertype;
+
 
     @FXML
     void search_arr_date_action(ActionEvent event) {
+
 
         Search_Table_Data.clear();
         String arr_date = search_arr_date.getValue().toString();
         List<DBObject> dbObject_p = product.selectproductby_arrdate(arr_date);
 
 
-
         //
-       if(dbObject_p==null ){
+        if (dbObject_p == null) {
 
-           dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "not found");
-
-
-       }else
-       {
-           for (int i = 0; i < dbObject_p.size(); i++) {
-
-               DBObject ee = dbObject_p.get(i);
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "not found");
 
 
+        } else {
+            for (int i = 0; i < dbObject_p.size(); i++) {
 
-               // select SupplierName
-               String subblierId = ee.get("product_subblier_id").toString();
-
-               // select EmployeeName
-               String employeeId = ee.get("product_employee_id").toString();
+                DBObject ee = dbObject_p.get(i);
 
 
-               DBObject subblierObject = subblier.selectSupplierById(subblierId);
-               DBObject employeeObject = employee.selectEmployeeById(employeeId);
+                // select SupplierName
+                String subblierId = ee.get("product_subblier_id").toString();
+
+                // select EmployeeName
+                String employeeId = ee.get("product_employee_id").toString();
 
 
-               Search_Table_Data.add(new Search_Table(ee.get("_id").toString(),
-                       ee.get("name").toString(),
-                       subblierObject.get("name").toString(),
-                       employeeObject.get("name").toString(),
-                       ee.get("sellprice").toString(),
-                       ee.get("buyprice").toString(),
-                       ee.get("arr_date").toString(),
-                       ee.get("req_date").toString()));
+                DBObject subblierObject = subblier.selectSupplierById(subblierId);
+                DBObject employeeObject = employee.selectEmployeeById(employeeId);
 
 
-           }
+                Search_Table_Data.add(new Search_Table(ee.get("_id").toString(),
+                        ee.get("name").toString(),
+                        subblierObject.get("name").toString(),
+                        employeeObject.get("name").toString(),
+                        ee.get("sellprice").toString(),
+                        ee.get("buyprice").toString(),
+                        ee.get("arr_date").toString(),
+                        ee.get("req_date").toString()));
 
-       }
+
+            }
+
+        }
         final TreeItem<Search_Table> rootsearch = new RecursiveTreeItem<Search_Table>(Search_Table_Data, RecursiveTreeObject::getChildren);
         search_tableview.setRoot(rootsearch);
-
-
-
 
 
     }
@@ -1000,19 +1000,16 @@ public class container_controller implements Initializable {
         List<DBObject> dbObject_p = product.selectproductby_reqdate(req_date);
 
 
-
         //
-        if(dbObject_p==null ){
+        if (dbObject_p == null) {
 
             dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "not found");
 
 
-        }else
-        {
+        } else {
             for (int i = 0; i < dbObject_p.size(); i++) {
 
                 DBObject ee = dbObject_p.get(i);
-
 
 
                 // select SupplierName
@@ -1109,20 +1106,18 @@ public class container_controller implements Initializable {
         String id = ids.get(index);
 
 
-
         ////////////////
 
 
         List<DBObject> dbObject_p = product.selectproductby_employeeid(id);
 
 
-        if(dbObject_p==null ){
+        if (dbObject_p == null) {
 
             dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "not found");
 
 
-        }
-        else {
+        } else {
 
 
             for (int i = 0; i < dbObject_p.size(); i++) {
@@ -1154,11 +1149,8 @@ public class container_controller implements Initializable {
             }
         }
 
-            final TreeItem<Search_Table> rootsearch = new RecursiveTreeItem<Search_Table>(Search_Table_Data, RecursiveTreeObject::getChildren);
-            search_tableview.setRoot(rootsearch);
-
-
-
+        final TreeItem<Search_Table> rootsearch = new RecursiveTreeItem<Search_Table>(Search_Table_Data, RecursiveTreeObject::getChildren);
+        search_tableview.setRoot(rootsearch);
 
 
     }
@@ -1166,7 +1158,7 @@ public class container_controller implements Initializable {
     @FXML
     void search_subblier_name_action(ActionEvent event) {
 
-         Search_Table_Data.clear();
+        Search_Table_Data.clear();
 
         List<DBObject> dbObjects3 = subblier.selectAllSubbliser();
         ArrayList<String> ids = new ArrayList<>();
@@ -1191,12 +1183,11 @@ public class container_controller implements Initializable {
 
         System.out.println(dbObject_p);
 
-        if(dbObject_p==null ){
+        if (dbObject_p == null) {
 
             dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "not found");
 
-        }
-        else {
+        } else {
 
             for (int i = 0; i < dbObject_p.size(); i++) {
 
@@ -1226,22 +1217,19 @@ public class container_controller implements Initializable {
 
             }
         }
-            final TreeItem<Search_Table> rootsearch = new RecursiveTreeItem<Search_Table>(Search_Table_Data, RecursiveTreeObject::getChildren);
-            search_tableview.setRoot(rootsearch);
+        final TreeItem<Search_Table> rootsearch = new RecursiveTreeItem<Search_Table>(Search_Table_Data, RecursiveTreeObject::getChildren);
+        search_tableview.setRoot(rootsearch);
 
 
-        }
-
-
-
+    }
 
 
     @FXML
     void search_by_name_mouse_clicked(MouseEvent event) {
 
-        List<DBObject> names  = product.selectproducts();
+        List<DBObject> names = product.selectproducts();
         Product_names.clear();
-        for (int i =0 ;  i < names.size();i++){
+        for (int i = 0; i < names.size(); i++) {
             DBObject o = names.get(i);
             Product_names.add(o.get("name").toString());
         }
@@ -1253,23 +1241,21 @@ public class container_controller implements Initializable {
     @FXML
     void search_by_subname_mouse_clicked(MouseEvent event) {
 
-        List<DBObject> names  = subblier.selectAllSubbliser();
+        List<DBObject> names = subblier.selectAllSubbliser();
         subblier_names.clear();
-        for (int i =0 ;  i < names.size();i++){
+        for (int i = 0; i < names.size(); i++) {
             DBObject o = names.get(i);
             subblier_names.add(o.get("name").toString());
         }
 
     }
+
     @FXML
-
-
-
     void search_by_empname_mouse_clicked(MouseEvent event) {
 
-        List<DBObject> names  = employee.selectemployees();
+        List<DBObject> names = employee.selectemployees();
         employee_names_names.clear();
-        for (int i =0 ;  i < names.size();i++){
+        for (int i = 0; i < names.size(); i++) {
             DBObject o = names.get(i);
             employee_names_names.add(o.get("name").toString());
         }
@@ -1277,17 +1263,19 @@ public class container_controller implements Initializable {
     }
 
 
-
-
-
-
-
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        System.out.println("User Name is : " + Username);
+        search_name_label.setText(Username);
+        products_name_label.setText(Username);
+        employee_name_label.setText(Username);
+        subblier_name_label.setText(Username);
+        order_name_label.setText(Username);
+        // ------------ set text To Labels
 
+
+        // --------------------------------
         List<DBObject> dbObjects3 = product.selectproducts();
         Product_names.clear();
         for (int i = 0; i < dbObjects3.size(); i++) {
@@ -1311,8 +1299,6 @@ public class container_controller implements Initializable {
         search_name.setItems(Product_names);
         search_employee_name.setItems(employee_names_names);
         search_subblier_name.setItems(subblier_names);
-
-
 
 
         // initialize subblier table
@@ -1511,8 +1497,6 @@ public class container_controller implements Initializable {
         /////////////////////////////////////////// initialize order table //////////////////////////////////////////
 
 
-
-
         order_name_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Order_Table, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Order_Table, String> param) {
@@ -1537,13 +1521,11 @@ public class container_controller implements Initializable {
         });
         order_date_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Order_Table, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Order_Table, String > param) {
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<Order_Table, String> param) {
                 return param.getValue().getValue().date;
             }
 
         });
-
-
 
 
         // ***********************  select all supplier database ***********************
@@ -1572,7 +1554,6 @@ public class container_controller implements Initializable {
 
 
         // ----------------------------------------- search Table ------------------------------------
-
 
 
         search_name_col.setCellValueFactory(new Callback<TreeTableColumn.CellDataFeatures<Search_Table, String>, ObservableValue<String>>() {
@@ -1629,7 +1610,6 @@ public class container_controller implements Initializable {
         final TreeItem<Search_Table> rootsearch = new RecursiveTreeItem<Search_Table>(Search_Table_Data, RecursiveTreeObject::getChildren);
         search_tableview.setRoot(rootsearch);
         search_tableview.setShowRoot(false);
-
 
 
         // double Click Action subblier
@@ -1723,8 +1703,7 @@ public class container_controller implements Initializable {
     // -------------------- Supplier table class ----------------------------
 
 
-    class SupplierTable extends RecursiveTreeObject<SupplierTable>
-    {
+    class SupplierTable extends RecursiveTreeObject<SupplierTable> {
 
         SimpleStringProperty id;
         SimpleStringProperty name;

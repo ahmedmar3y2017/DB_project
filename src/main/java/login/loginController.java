@@ -43,9 +43,6 @@ public class loginController implements Initializable {
     @FXML
     private ComboBox type_sign_up;
 
-    public static String id  ;
-    public static String name  ;
-    public static String type  ;
 
 
     @FXML
@@ -76,7 +73,6 @@ public class loginController implements Initializable {
 
 
             startContainer startContainer = new startContainer(Id,name,type);
-            container_controller.search_name_label.setText(name);
 
 
         }

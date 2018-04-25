@@ -13,12 +13,12 @@ import java.io.IOException;
 
 public class startContainer {
 
-    public startContainer(String id , String name , String type ) throws IOException {
+    public startContainer(String id, String name, String type) throws IOException {
 
 
-        loginController.id = id;
-        loginController.name = name;
-        loginController.type = type;
+        container_controller.Userid = id;
+        container_controller.Username = name;
+        container_controller.Usertype = type;
 
         Stage stage = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("/Fxml/main_screen.fxml"));
