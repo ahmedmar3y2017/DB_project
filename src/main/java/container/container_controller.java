@@ -1825,12 +1825,9 @@ public class container_controller implements Initializable {
 
 
                     this.product_name.setText(product_selected.name.getValue());
-                    this.product_employee_name.setValue(product_selected.p_employeename.getValue());
-                    this.product_subblier_name.setValue(product_selected.p_subbliername.getValue());
                     this.product_buy_price.setText(product_selected.buy_price.getValue());
                     this.product_sell_price.setText(product_selected.sell_price.getValue());
-                    this.product_arrival_date.getEditor().setText(product_selected.arr_date.getValue());
-                    this.product_request_date.getEditor().setText(product_selected.req_date.getValue());
+
 
 
                 }
