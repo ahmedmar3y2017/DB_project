@@ -12,7 +12,7 @@ public class order {
 
     static DBCollection dbCollection = mongoConnection.getDatabase().getCollection("orders");
 
-    public static BasicDBObject insertorder(BasicDBObject basicDBObject) {
+    public static BasicDBObject insertorder (BasicDBObject basicDBObject) {
 
         dbCollection.insert(basicDBObject);
         return basicDBObject;
@@ -25,13 +25,15 @@ public class order {
 
     }
 
-    public static DBCursor getByUserId() {
+    public static BasicDBObject deleteorder(String id) {
 
-        BasicDBObject query = new BasicDBObject();
-        query.put("user_data.id", new BasicDBObject("$eq", "5adf1f0dfe4aa93a50f986ed"));
-        DBCursor cur = dbCollection.find(query);
-        return cur;
+
+        BasicDBObject basicDBObject = new BasicDBObject();
+        basicDBObject.put("_id", new ObjectId(id));
+
+        dbCollection.remove(basicDBObject);
+
+        return basicDBObject;
 
     }
-
 }

@@ -2,6 +2,7 @@ package login;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import container.container_controller;
 import container.startContainer;
 import dialog.dialog;
 import javafx.collections.FXCollections;
@@ -52,7 +53,7 @@ public class loginController implements Initializable {
         //  System.out.println(object);
 
         if (phone_text_sign_in.getText().trim().isEmpty()
-                && pass_text_sign_in.getText().trim().isEmpty()) {
+                || pass_text_sign_in.getText().trim().isEmpty()) {
             dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "login data is required");
         } else if (object == null) {
             dialog dialog = new dialog(Alert.AlertType.WARNING, "error", " user not found");
@@ -69,11 +70,11 @@ public class loginController implements Initializable {
             String phone = object.get("phone").toString();
             String address = object.get("address").toString();
 
-            System.out.println(Id+"\n"+name + "\n"+type);
 
 
 
             startContainer startContainer = new startContainer(Id,name,type,phone,address);
+            container_controller container_controller = new container_controller();
 
 
         }
@@ -113,7 +114,7 @@ public class loginController implements Initializable {
 
                 BasicDBObject basicDBObject2 = login.insertuser(basicDBObject);
 
-                dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "new user added");
+                dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "Done", "new user added");
 
                 name_text_sign_up.setText("");
                 phone_text_sign_up.setText("");

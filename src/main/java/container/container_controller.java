@@ -57,6 +57,37 @@ public class container_controller implements Initializable {
     public static String address;
 
 
+    //////////////////////////////////////////////////////
+
+
+
+    ObservableList<SupplierTable> supplierTable_Data = FXCollections.observableArrayList();
+
+    ObservableList<String> subblier_names = FXCollections.observableArrayList();
+
+    ObservableList<EmployeeTable> EmployeeTable_data = FXCollections.observableArrayList();
+
+    ObservableList<String> employee_names_names = FXCollections.observableArrayList();
+
+    ObservableList<ProductTable> Product_Table_Data = FXCollections.observableArrayList();
+
+    ObservableList<String> Product_names = FXCollections.observableArrayList();
+
+    ObservableList<Order_Table> Order_table_data = FXCollections.observableArrayList();
+
+    ObservableList<Search_Table> Search_Table_Data = FXCollections.observableArrayList();
+
+    ObservableList<String> order_names = FXCollections.observableArrayList();
+
+    ArrayList<String> employee_Ids = new ArrayList<>();
+
+    ArrayList<String> subblier_Ids = new ArrayList<>();
+
+    ArrayList<String> p_ids = new ArrayList<>();
+
+
+
+
     /////////////////////////////////////////// Subblier ////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -90,11 +121,6 @@ public class container_controller implements Initializable {
     @FXML
     private TextField supplierPhone;
 
-    ObservableList<SupplierTable> supplierTable_Data = FXCollections.observableArrayList();
-
-    ObservableList<String> subblier_names = FXCollections.observableArrayList();
-
-    ArrayList<String> subblier_Ids = new ArrayList<>();
 
 
     @FXML
@@ -144,6 +170,7 @@ public class container_controller implements Initializable {
 
 
             }
+
 
 
         }
@@ -266,6 +293,8 @@ public class container_controller implements Initializable {
 
     }
 
+
+
     /////////////////////////////////////////// EMPLOYEE ////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -304,11 +333,7 @@ public class container_controller implements Initializable {
     @FXML
     private TreeTableColumn<EmployeeTable, Double> employee_salary_col;
 
-    ObservableList<EmployeeTable> EmployeeTable_data = FXCollections.observableArrayList();
 
-    ObservableList<String> employee_names_names = FXCollections.observableArrayList();
-
-    ArrayList<String> employee_Ids = new ArrayList<>();
 
 
     @FXML
@@ -351,7 +376,7 @@ public class container_controller implements Initializable {
                 employee_table.setRoot(rootemp);
 
 
-                dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "  new employee is added");
+                dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "Done", "  new employee is added");
 
 
                 // reset Fields
@@ -412,6 +437,8 @@ public class container_controller implements Initializable {
 
 
             }
+
+
 
 
         }
@@ -532,7 +559,7 @@ public class container_controller implements Initializable {
     @FXML
     private TextField product_name;
 
-    ObservableList<ProductTable> Product_Table_Data = FXCollections.observableArrayList();
+
 
 
     @FXML
@@ -560,8 +587,8 @@ public class container_controller implements Initializable {
                 || product_sell_price.getText().trim().isEmpty()
                 || product_subblier_name.getSelectionModel().getSelectedItem() == null
                 || product_employee_name.getSelectionModel().getSelectedItem() == null
-                || product_arrival_date.getValue().equals("")
-                || product_request_date.getValue().equals("")
+                || product_arrival_date.getValue()==null
+                || product_request_date.getValue()==null
 
                 ) {
             dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "enter all data");
@@ -614,7 +641,7 @@ public class container_controller implements Initializable {
             }
 
 
-            dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "error", "  new product is added");
+            dialog dialog = new dialog(Alert.AlertType.CONFIRMATION, "Done", "  new product is added");
 
 
             this.product_name.setText("");
@@ -637,30 +664,41 @@ public class container_controller implements Initializable {
         if (product_name.getText().trim().isEmpty()
                 || product_buy_price.getText().trim().isEmpty()
                 || product_sell_price.getText().trim().isEmpty()
-                || product_employee_name.getEditor().getText().trim().isEmpty()
-                || product_subblier_name.getEditor().getText().trim().isEmpty()
-                || product_arrival_date.getEditor().getText().trim().isEmpty()
-                || product_request_date.getEditor().getText().trim().isEmpty()
-
+                || product_subblier_name.getSelectionModel().getSelectedItem() == null
+                || product_employee_name.getSelectionModel().getSelectedItem() == null
+                || product_arrival_date.getValue()==null
+                || product_request_date.getValue()==null
                 ) {
             dialog dialog = new dialog(Alert.AlertType.WARNING, "error", " enter all data ");
 
         } else {
 
+
             ProductTable produc_selected = product_table_view.getSelectionModel().getSelectedItem().getValue();
+
+            // select Supplier Id From Combobox
+            int supplierIndex = product_subblier_name.getSelectionModel().getSelectedIndex();
+            String subblierId = subblier_Ids.get(supplierIndex);
+            // select Employee Id From Combobox
+            int employeeIndex = product_employee_name.getSelectionModel().getSelectedIndex();
+            String employeeId = employee_Ids.get(employeeIndex);
+
+
+
+            Date arrival_date = Date.from(product_arrival_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date request_date = Date.from(product_request_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 
             // insert into product database
 
             BasicDBObject basicDBObject = new BasicDBObject();
             basicDBObject.put("name", product_name.getText());
-            basicDBObject.put("product_subblier_id", subblier_Ids.get(product_subblier_name.getSelectionModel().getSelectedIndex()).toString());
-            basicDBObject.put("product_employee_id", employee_Ids.get(product_employee_name.getSelectionModel().getSelectedIndex()).toString());
+            basicDBObject.put("product_subblier_id",subblierId);
+            basicDBObject.put("product_employee_id", employeeId);
             basicDBObject.put("sellprice", product_sell_price.getText());
             basicDBObject.put("buyprice", product_buy_price.getText());
-            basicDBObject.put("arr_date", new SimpleDateFormat("yyyy-MM-dd").format(Date.from(product_arrival_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant())));
-            basicDBObject.put("req_date", new SimpleDateFormat("yyyy-MM-dd").format(Date.from(product_request_date.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant())));
-
+            basicDBObject.put("arr_date", new SimpleDateFormat("yyyy-MM-dd").format(arrival_date));
+            basicDBObject.put("req_date", new SimpleDateFormat("yyyy-MM-dd").format(request_date));
 
             BasicDBObject b_updated = product.updateproduct(produc_selected.id.get(), basicDBObject);
             if (b_updated != null) {
@@ -676,8 +714,8 @@ public class container_controller implements Initializable {
                         product_employee_name.getSelectionModel().getSelectedItem(),
                         product_sell_price.getText(),
                         product_buy_price.getText(),
-                        product_arrival_date.getEditor().getText().toString(),
-                        product_request_date.getEditor().getText().toString()
+                        product_arrival_date.getValue().toString(),
+                        product_request_date.getValue().toString()
                 ));
 
                 final TreeItem<ProductTable> rootproduct = new RecursiveTreeItem<ProductTable>(Product_Table_Data, RecursiveTreeObject::getChildren);
@@ -781,11 +819,6 @@ public class container_controller implements Initializable {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    ObservableList<String> Product_names = FXCollections.observableArrayList();
-
-    ObservableList<Order_Table> Order_table_data = FXCollections.observableArrayList();
-
-    ArrayList<String> p_ids = new ArrayList<>();
 
 
     @FXML
@@ -831,6 +864,9 @@ public class container_controller implements Initializable {
 
     @FXML
     private DatePicker order_date1;
+
+    @FXML
+    private Button remove_order;
 
     @FXML
     private ComboBox<String> order_product_name_unwanted;
@@ -915,6 +951,48 @@ public class container_controller implements Initializable {
     @FXML
     void cancel_order_action(ActionEvent event) {
 
+    }
+
+    @FXML
+    void remove_order_action(ActionEvent event) {
+
+        // check Select from table
+
+        RecursiveTreeItem recursiveTreeItem = (RecursiveTreeItem) order_table_view.getSelectionModel().getSelectedItem();
+
+        if (recursiveTreeItem == null) {
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "choose order to delete  ");
+
+
+        } else {
+
+            Order_Table order_selected = (Order_Table) recursiveTreeItem.getValue();
+
+
+            // reomve From database
+
+            BasicDBObject basicDBObject = order.deleteorder(order_selected.order_id.get());
+
+
+            if (basicDBObject != null) {
+
+                // remove from table
+
+                boolean t = Order_table_data.remove(order_selected);
+                if (t) {
+
+                    final TreeItem<Order_Table> root_order = new RecursiveTreeItem<Order_Table>(Order_table_data, RecursiveTreeObject::getChildren);
+                    order_table_view.setRoot(root_order);
+
+                }
+
+
+            }
+
+
+        }
+
+
 
     }
 
@@ -979,8 +1057,7 @@ public class container_controller implements Initializable {
 
 
 
-    ObservableList<Search_Table> Search_Table_Data = FXCollections.observableArrayList();
-    ObservableList<String> order_names = FXCollections.observableArrayList();
+
 
 
 
@@ -1310,16 +1387,16 @@ public class container_controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources)
     {
 
-        if (Usertype == "user"){
-            order_table_view.setVisible(false);
-        }
-        else {
-            make_order.setDisable(true);
-            cancel_order.setDisable(true);
-        }
 
+          if(Usertype.equals("user")){
+              order_table_view.setDisable(true);
+              remove_order.setDisable(true);
 
-        System.out.println("User Name is : " + Username);
+          }
+          if(Usertype.equals("admin")){
+              make_order.setDisable(true);
+              cancel_order.setDisable(true);
+          }
         search_name_label.setText(Username);
         products_name_label.setText(Username);
         employee_name_label.setText(Username);
@@ -1337,11 +1414,6 @@ public class container_controller implements Initializable {
             p_ids.add(obj.get("_id").toString());
 
         }
-
-
-
-
-
 
 
         supplierUpdate.setDisable(true);
@@ -1739,12 +1811,9 @@ public class container_controller implements Initializable {
 
 
                     this.product_name.setText(product_selected.name.getValue());
-                    this.product_employee_name.getEditor().setText(product_selected.p_employeename.getValue());
-                    this.product_subblier_name.getEditor().setText(product_selected.p_subbliername.getValue());
                     this.product_buy_price.setText(product_selected.buy_price.getValue());
                     this.product_sell_price.setText(product_selected.sell_price.getValue());
-                    this.product_arrival_date.getEditor().setText(product_selected.arr_date.getValue());
-                    this.product_request_date.getEditor().setText(product_selected.req_date.getValue());
+
 
 
                 }
