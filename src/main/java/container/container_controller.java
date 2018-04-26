@@ -40,14 +40,12 @@ public class container_controller implements Initializable {
 
     @FXML
     private Label products_name_label;
-
     @FXML
     private Label employee_name_label;
     @FXML
     private Label subblier_name_label;
     @FXML
     private Label order_name_label;
-
     @FXML
     public Label search_name_label;
 
