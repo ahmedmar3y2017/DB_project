@@ -868,6 +868,9 @@ public class container_controller implements Initializable {
     private DatePicker order_date1;
 
     @FXML
+    private Button remove_order;
+
+    @FXML
     private ComboBox<String> order_product_name_unwanted;
 
 
@@ -1387,7 +1390,15 @@ public class container_controller implements Initializable {
     {
 
 
+          if(Usertype.equals("user")){
+              order_table_view.setDisable(true);
+              remove_order.setDisable(true);
 
+          }
+          if(Usertype.equals("admin")){
+              make_order.setDisable(true);
+              cancel_order.setDisable(true);
+          }
         search_name_label.setText(Username);
         products_name_label.setText(Username);
         employee_name_label.setText(Username);
