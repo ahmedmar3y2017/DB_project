@@ -49,4 +49,13 @@ public class order {
         return retreived;
 
     }
+    public static DBCursor getByUserId(String id) {
+        BasicDBObject query = new BasicDBObject();
+        query.put("user_data.id", new BasicDBObject("$eq", id));
+        DBCursor cur = dbCollection.find(query);
+
+        return cur;
+
+    }
+
 }
