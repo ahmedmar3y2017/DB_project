@@ -19,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import login.loginController;
 import mongo.employee;
@@ -48,6 +49,33 @@ public class container_controller implements Initializable {
     private Label order_name_label;
     @FXML
     public Label search_name_label;
+
+
+    @FXML
+    void sign_out_action_employees(ActionEvent event) {
+     System.exit(0);
+
+    }
+
+    @FXML
+    void sign_out_action_order(ActionEvent event) {
+        System.exit(0);
+    }
+
+    @FXML
+    void sign_out_action_products(ActionEvent event) {
+        System.exit(0);
+    }
+
+    @FXML
+    void sign_out_action_search(ActionEvent event) {
+        System.exit(0);
+    }
+
+    @FXML
+    void sign_out_action_supplier(ActionEvent event) {
+        System.exit(0);
+    }
 
 
     public static String Username;
@@ -999,12 +1027,19 @@ public class container_controller implements Initializable {
     @FXML
     void cancel_order_mouse_clicked(MouseEvent event) {
 
-        List<DBObject> orders = order.selectorders();
-        for (int i = 0; i < orders.size(); i++) {
+        List<DBObject> orders = order.select_order_by_user_id(Userid);
+        if (orders == null) {
+            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "not found");
 
-            DBObject object = orders.get(i);
+        }
+
+        else {
+            for (int i = 0; i < orders.size(); i++) {
+
+                DBObject object = orders.get(i);
             order_names.add(object.get("name").toString());
 
+        }
         }
 
     }
@@ -1397,6 +1432,8 @@ public class container_controller implements Initializable {
               make_order.setDisable(true);
               cancel_order.setDisable(true);
           }
+
+      //  System.out.println(order.select_order_by_user_id(Userid));
         search_name_label.setText(Username);
         products_name_label.setText(Username);
         employee_name_label.setText(Username);
