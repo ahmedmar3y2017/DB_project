@@ -4,6 +4,7 @@ package container;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 import dialog.dialog;
@@ -927,7 +928,7 @@ public class container_controller implements Initializable {
 
 
             BasicDBObject user = new BasicDBObject();
-            user.put("id",Id);
+            user.put("id",Userid);
             user.put("name" , Username);
             user.put("phone" , phone);
             user.put("address" ,address);
@@ -979,6 +980,22 @@ public class container_controller implements Initializable {
     @FXML
     void cancel_order_action(ActionEvent event) {
 
+        List<String> ids = new ArrayList<>();
+
+        List<DBObject> db =order.getByUserId(Userid);
+        for (int i = 0;i<db.size();i++){
+            DBObject object = db.get(i);
+            String id = object.get("_id").toString();
+            ids.add(id);
+        }
+
+
+        int index = order_product_name_unwanted.getSelectionModel().getSelectedIndex();
+        String idd = ids.get(index);
+
+        BasicDBObject basicDBObject =  order.deleteorder(idd);
+        order_names.remove(index);
+
     }
 
     @FXML
@@ -1027,21 +1044,17 @@ public class container_controller implements Initializable {
     @FXML
     void cancel_order_mouse_clicked(MouseEvent event) {
 
-        List<DBObject> orders = order.select_order_by_user_id(Userid);
-        if (orders == null) {
-            dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "not found");
-
-        }
-
-        else {
-            for (int i = 0; i < orders.size(); i++) {
-
-                DBObject object = orders.get(i);
-            order_names.add(object.get("name").toString());
-
-        }
-        }
-
+order_names.clear();
+       List<DBObject> db =order.getByUserId(Userid);
+       if (db==null){
+           dialog dialog = new dialog(Alert.AlertType.WARNING, "error", "not found ");
+       }
+       else {
+           for (int i = 0; i < db.size(); i++) {
+               DBObject object = db.get(i);
+               order_names.add(object.get("name").toString());
+           }
+       }
     }
 
 
