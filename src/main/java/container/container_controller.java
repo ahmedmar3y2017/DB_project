@@ -1,15 +1,10 @@
 package container;
-
-
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-
 import dialog.dialog;
 import javafx.beans.property.SimpleDoubleProperty;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,16 +13,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import javafx.util.Callback;
-import login.loginController;
 import mongo.employee;
 import mongo.order;
 import mongo.product;
 import mongo.subblier;
-
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -36,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-
 public class container_controller implements Initializable {
 
 
@@ -50,6 +42,79 @@ public class container_controller implements Initializable {
     private Label order_name_label;
     @FXML
     public Label search_name_label;
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    @FXML
+    void amount_validate(KeyEvent event) {
+        char ar[] = event.getCharacter().toCharArray();
+        char ch = ar[event.getCharacter().toCharArray().length - 1];
+        if (!(ch >= '0' && ch <= '9')) {
+            event.consume();
+        }
+
+    }
+
+    @FXML
+    void buy_price_validate(KeyEvent event) {
+        char ar[] = event.getCharacter().toCharArray();
+        char ch = ar[event.getCharacter().toCharArray().length - 1];
+        if (!(ch >= '0' && ch <= '9')) {
+            event.consume();
+        }
+    }
+
+    @FXML
+    void sell_price_validate(KeyEvent event) {
+        char ar[] = event.getCharacter().toCharArray();
+        char ch = ar[event.getCharacter().toCharArray().length - 1];
+        if (!(ch >= '0' && ch <= '9')) {
+            event.consume();
+        }
+    }
+
+    @FXML
+    void employee_phone_validate(KeyEvent event) {
+        char ar[] = event.getCharacter().toCharArray();
+        char ch = ar[event.getCharacter().toCharArray().length - 1];
+        if (!(ch >= '0' && ch <= '9')) {
+            event.consume();
+        }
+    }
+
+    @FXML
+    void employee_salary_validate(KeyEvent event) {
+        char ar[] = event.getCharacter().toCharArray();
+        char ch = ar[event.getCharacter().toCharArray().length - 1];
+        if (!(ch >= '0' && ch <= '9')) {
+            event.consume();
+        }
+    }
+
+    @FXML
+    void supplier_phone_validate(KeyEvent event) {
+        char ar[] = event.getCharacter().toCharArray();
+        char ch = ar[event.getCharacter().toCharArray().length - 1];
+        if (!(ch >= '0' && ch <= '9')) {
+            event.consume();
+        }
+    }
+
+    @FXML
+    void sign_up_phone_validate(KeyEvent event) {
+        char ar[] = event.getCharacter().toCharArray();
+        char ch = ar[event.getCharacter().toCharArray().length - 1];
+        if (!(ch >= '0' && ch <= '9')) {
+            event.consume();
+        }
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////
 
 
     @FXML
@@ -113,6 +178,9 @@ public class container_controller implements Initializable {
     ArrayList<String> subblier_Ids = new ArrayList<>();
 
     ArrayList<String> p_ids = new ArrayList<>();
+
+
+
 
 
 
@@ -1446,7 +1514,7 @@ order_names.clear();
               cancel_order.setDisable(true);
           }
 
-      //  System.out.println(order.select_order_by_user_id(Userid));
+
         search_name_label.setText(Username);
         products_name_label.setText(Username);
         employee_name_label.setText(Username);

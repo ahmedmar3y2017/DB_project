@@ -21,7 +21,7 @@
       <Label layoutX="605.0" layoutY="200.0" text="Phone" />
       <Label layoutX="605.0" layoutY="350.0" text="Type" />
       <TextField fx:id="name_text_sign_up" layoutX="670.0" layoutY="150.0" />
-      <TextField fx:id="phone_text_sign_up" layoutX="670.0" layoutY="200.0" />
+      <TextField fx:id="phone_text_sign_up" layoutX="670.0" layoutY="200.0" onKeyTyped="#sign_up_phone_validate" />
       <TextField fx:id="address_text_sign_up" layoutX="670.0" layoutY="300.0" />
       <TextField fx:id="pass_text_sign_up" layoutX="670.0" layoutY="250.0" />
       <ComboBox fx:id="type_sign_up" layoutX="670.0" layoutY="350.0" prefWidth="150.0" />

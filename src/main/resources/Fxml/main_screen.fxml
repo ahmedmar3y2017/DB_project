@@ -71,8 +71,8 @@
                         </TreeTableView>
                         <Label layoutX="35.0" layoutY="395.0" text="Sell_Price" />
                         <Label layoutX="35.0" layoutY="442.0" text="Buy_Price" />
-                        <TextField fx:id="product_sell_price" layoutX="126.0" layoutY="391.0" />
-                        <TextField fx:id="product_buy_price" layoutX="126.0" layoutY="438.0" />
+                        <TextField fx:id="product_sell_price" layoutX="126.0" layoutY="391.0" onKeyTyped="#sell_price_validate" />
+                        <TextField fx:id="product_buy_price" layoutX="126.0" layoutY="438.0" onKeyTyped="#buy_price_validate" />
                         <Label layoutX="94.0" layoutY="37.0" scaleX="1.5" scaleY="1.5" text="select the raw you want to remove or double click to update" />
                         <Label layoutX="326.0" layoutY="348.0" text="Arrival_Date" />
                         <Label layoutX="326.0" layoutY="441.0" text="Request_Date" />
@@ -111,13 +111,13 @@
                             <Label layoutX="600.0" layoutY="110.0" text="Name" />
                             <Label layoutX="600.0" layoutY="160.0" text="Phone" />
                             <TextField fx:id="employee_name" layoutX="690.0" layoutY="110.0" />
-                            <TextField fx:id="employee_phone" layoutX="690.0" layoutY="160.0" />
+                            <TextField fx:id="employee_phone" layoutX="690.0" layoutY="160.0" onKeyTyped="#employee_phone_validate" />
                             <Label layoutX="80.0" layoutY="40.0" scaleX="1.5" scaleY="1.5" text="select the raw you want to remove or double click to update" />
                         <Label layoutX="600.0" layoutY="210.0" text="Address" />
                         <TextField fx:id="employee_address" layoutX="690.0" layoutY="210.0" />
                         <Button fx:id="refresh_btn_emp" layoutX="738.0" layoutY="400.0" mnemonicParsing="false" onAction="#refresh_btn_emp_action" styleClass="round-red" text="refresh" />
                         <Label layoutX="606.0" layoutY="264.0" text="Salary" />
-                        <TextField fx:id="employee_salary" layoutX="690.0" layoutY="260.0" />
+                        <TextField fx:id="employee_salary" layoutX="690.0" layoutY="260.0" onKeyTyped="#employee_salary_validate" />
                         </children>
                     </AnchorPane>
                 </content>
@@ -147,7 +147,7 @@
                             <TextField fx:id="supplierAddress" layoutX="753.0" layoutY="222.0" prefHeight="25.0" prefWidth="156.0" />
                             <Label layoutX="94.0" layoutY="40.0" scaleX="1.5" scaleY="1.5" text="select the raw you want to remove or double click to update" />
                         <Label layoutX="677.0" layoutY="174.0" text="phone" />
-                        <TextField fx:id="supplierPhone" layoutX="756.0" layoutY="170.0" />
+                        <TextField fx:id="supplierPhone" layoutX="756.0" layoutY="170.0" onKeyTyped="#supplier_phone_validate" />
                         <Button fx:id="supplierRefresh" layoutX="756.0" layoutY="363.0" mnemonicParsing="false" onAction="#supplierRefreshAction" prefHeight="50.0" prefWidth="82.0" styleClass="round-red" text="Refresh" />
                         </children>
                     </AnchorPane>
@@ -178,7 +178,7 @@
                         <Label layoutX="856.0" layoutY="151.0" text="order_name" />
                         <Label layoutX="494.0" layoutY="201.0" text="Amount" />
                         <Label layoutX="494.0" layoutY="251.0" text="Date" />
-                        <TextField fx:id="order_amount_text" layoutX="592.0" layoutY="200.0" />
+                        <TextField fx:id="order_amount_text" layoutX="592.0" layoutY="200.0" onKeyTyped="#amount_validate" />
                         <DatePicker fx:id="order_date1" layoutX="592.0" layoutY="250.0" prefWidth="149.0" />
                         <ComboBox fx:id="order_product_name_wanted" layoutX="592.0" layoutY="143.0" onMouseClicked="#mouse" prefHeight="24.0" prefWidth="150.0" />
                         <ComboBox fx:id="order_product_name_unwanted" layoutX="813.0" layoutY="209.0" onMouseClicked="#cancel_order_mouse_clicked" prefWidth="150.0" />
